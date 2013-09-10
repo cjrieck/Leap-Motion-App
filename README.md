@@ -5,6 +5,7 @@ Leap Into the Future of Education
 
  Teammates: Clayton, Robert, Aimee, Bryan
 
+*** Make sure to include appropriate files for your system in the app's directory ***
 
  GitHub Tutorial:
 
