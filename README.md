@@ -5,8 +5,13 @@ Leap Into the Future of Education
 
  Teammates: Clayton, Robert, Aimee, Bryan
 
+*** Make sure to include appropriate files for your system in the app's directory ***
 
  GitHub Tutorial:
 
  http://net.tutsplus.com/articles/general/team-collaboration-with-github/
 
+
+I am editing the ReadMe as a test. - Aimee 9/10
+
+Done.
