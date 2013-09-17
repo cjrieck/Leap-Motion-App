@@ -77,10 +77,6 @@ class SampleListener(Leap.Listener):
 		self.screen.blit(self.ball.image, self.ball.move())
 
 		pygame.display.update()
-		trash = pygame.event.get()
-		if trash != []:
-			print trash
-		# pygame.event.pump()
 
 
 	def state_string(self, state):
