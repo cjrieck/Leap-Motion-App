@@ -2,6 +2,7 @@ import sys
 import Leap
 from Leap import SwipeGesture
 import pygame
+from pygame.locals import *
 import random
 
 pygame.init()
@@ -12,14 +13,48 @@ WIDTH = available_resolutions[0][0]
 HEIGHT = available_resolutions[0][1]
 SIZE = WIDTH, HEIGHT
 
+class Cursor(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((50, 50))
+        self.image.fill((0, 255, 255))
+        # pygame.draw.circle(self.image, (0, 0, 255), (25, 25), 25, 0)
+        self.rect = self.image.get_rect()
+
+        
+    def update(self, position):
+        self.rect.center = position
+
+    def scale_cursor(self, multiple):
+    	height = int(multiple * 150)
+    	width = int(multiple * 150)
+    	
+    	newResolution = (width, height)
+    	previousCursor = self.image
+    	
+    	
+    	self.image = pygame.transform.smoothscale(previousCursor, newResolution)
+    	self.image.fill((0,255,255))
+    	return self.image
+
+    def change_fill(self):
+    	self.image.fill((0,0,0))
+    	return self.image 
+
 class MyListener(Leap.Listener):
 
-	def on_init(self, controller):
+	def __init__(self, screen, background, cursor, sprites):
+		Leap.Listener.__init__(self)
 		self.draw_on = False
 		self.last_position = (0,0)
 		self.color = 255,128,0
 		self.radius = 10
-		self.screen = pygame.display.set_mode(SIZE)
+
+		self.screen = screen
+		self.background = background
+		self.cursor = cursor
+		self.allSprites = sprites
+
 		print "Initialized"
 
 	def on_connect(self, controller):
@@ -35,9 +70,17 @@ class MyListener(Leap.Listener):
 		print "Exited"
 
 	def on_frame(self, controller):
-		
+
+
 		"""
-		NOTE: Maybe on SWIPE gesture, erase screen?
+		9/16/13
+
+		Figure out how to save what was drawn on the screen when you
+		go back to hovering. Screenshot it then blit the background
+		again as that screenshot?
+
+
+		Get circle scaling right in scale_cursor function
 		"""
 
 		frame = controller.frame()
@@ -56,26 +99,34 @@ class MyListener(Leap.Listener):
 
 		finger_pos = (int(x),int(y))
 
-		if distance <= -0.1:
+		if distance <= -0.001:
 			
 			pygame.draw.circle(self.screen, self.color, finger_pos, self.radius) # defines the brush and size of the brush
 			self.draw_on = True
+			# self.cursor.image = self.cursor.change_fill()
 
+		if distance <= 0.5 and distance > 0:
 
-		if distance <= 0.3 and distance > -0.1: #zone == 0: #e.type == pygame.MOUSEBUTTONUP: # has data types of 'pos' and 'button'
 			self.draw_on = False
 			self.color = (random.randrange(256), random.randrange(256), random.randrange(256)) # generates random color
 
-		# if e.type == pygame.MOUSEMOTION: # while clicking and holding. Has data type of 'pos', 'rel' and 'button'
+			self.cursor.image = self.cursor.scale_cursor(distance)
+
+			self.allSprites.clear(self.screen, self.background)
+			self.allSprites.update(finger_pos)
+			self.allSprites.draw(self.screen)
+
 		if self.draw_on: # if holding down mouse click
 			pygame.draw.circle(self.screen, self.color, finger_pos, self.radius) #draw a circle at new mouse position
 			self.round_line(self.screen, self.color, finger_pos, self.last_position, self.radius) # connects the 2 circles together to form a line
+
 		self.last_position = finger_pos # update the last position to the position you ended the line on
 	
-		if (not frame.gestures().is_empty) and distance > 0.3:
+		if (not frame.gestures().is_empty) and (distance > 0 and (not self.draw_on)):
 			self.screen.fill((0,0,0))
-			
+
 		pygame.display.flip() # Update full display Surface to the screen
+
 
 	"""
 	Function:
@@ -102,8 +153,17 @@ class MyListener(Leap.Listener):
 
 def main():
 
+	screen = pygame.display.set_mode(SIZE)
+	background = pygame.Surface(screen.get_size())
+	background.fill((0,0,0))
+	screen.blit(background, (0,0))
+	pygame.display.set_caption("LEAPS.edu")
+	
+	cursor = Cursor()
+	allSprites = pygame.sprite.Group(cursor)	
+
 	controller = Leap.Controller()
-	listener = MyListener()
+	listener = MyListener(screen, background, cursor, allSprites)
 
 	controller.add_listener(listener)
 
