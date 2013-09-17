@@ -23,11 +23,10 @@ class SampleListener(Leap.Listener):
 		image_width = 50
 		image_height = 50
 
-		ball_image = pygame.transform.scale(pygame.image.load("basketball.jpg"), (image_width, image_height))
+		ball_image = pygame.transform.scale(pygame.image.load("bouncyball.png"), (image_width, image_height))
 		self.ball = Ball(ball_image, (image_width, image_height), (WIDTH//2, 0), SIZE)
 
 		self.screen = pygame.display.set_mode(SIZE)
-		self.last_pos = (0, 0)
 		
 		print "Initialized"
 
@@ -48,36 +47,40 @@ class SampleListener(Leap.Listener):
 		print "Exited"
 
 	def on_frame(self, controller):
-		frame = controller.frame()
+		self.screen.fill((0, 0, 0))
 
+		frame = controller.frame()
 		interactionBox = frame.interaction_box
 
-		finger = frame.fingers.frontmost
+		# finger = frame.fingers.frontmost
+		for finger in frame.fingers:
 
-		# for finger in frame.fingers:
-		self.screen.fill((0, 0, 0))
-		normalizedPosition = interactionBox.normalize_point(finger.stabilized_tip_position)
+			normalizedPosition = interactionBox.normalize_point(finger.stabilized_tip_position)
 
-		x, y = normalizedPosition.x, normalizedPosition.y
+			x, y = normalizedPosition.x, normalizedPosition.y
 
-		scaledX, scaledY = (int(x*WIDTH), int(HEIGHT-(y*HEIGHT)))
-		
-		# Draw a line on top of the image on the screen
-		pygame.draw.circle(self.screen, (255, 255, 255), (scaledX, scaledY), 3)
+			scaledX, scaledY = (int(x*WIDTH), int(HEIGHT-(y*HEIGHT)))
+
+			pointScaler = normalizedPosition.z
+			pointSize = int(10*pointScaler)
+
+			pygame.draw.circle(self.screen, (255, 255, 255), (scaledX, scaledY), pointSize)
+
+			if self.ball.surrounds((scaledX, scaledY)):
+
+				self.ball.vY = 0
+				self.ball.vX = 0
+
+				self.ball.x = scaledX-(self.ball.width//2)
+				self.ball.y = scaledY-(self.ball.height//2)
+
 		self.screen.blit(self.ball.image, self.ball.move())
 
-		if self.ball.surrounds((scaledX, scaledY)):
-			old_x, old_y = self.last_pos
-
-			self.ball.vY = 0
-			self.ball.vX = 0
-
-			self.ball.x = scaledX-(self.ball.width//2)
-			self.ball.y = scaledY-(self.ball.height//2)
-
-		self.last_pos = (scaledX, scaledY)
-
 		pygame.display.update()
+		trash = pygame.event.get()
+		if trash != []:
+			print trash
+		# pygame.event.pump()
 
 
 	def state_string(self, state):
@@ -105,8 +108,6 @@ class Ball():
 		self.vX = 0
 		self.vY = 0
 
-		self.state = 0 # 0 = Falling, 1 = Rising
-
 	def move(self):
 		self.x += self.vX
 		self.y += self.vY
@@ -118,11 +119,6 @@ class Ball():
 	def update(self):
 		if self.y > self.yBound:
 			self.y = self.yBound
-			if self.state == 0:
-				self.state = 1
-			else:
-				self.state = 0
-
 			self.vY = -self.vY
 
 		if self.x > self.xBound or self.x < 0:
