@@ -64,7 +64,7 @@ class SampleListener(Leap.Listener):
 			pointScaler = normalizedPosition.z
 			pointSize = int(10*pointScaler)
 
-			pygame.draw.circle(self.screen, (255, 255, 255), (scaledX, scaledY), pointSize)
+			pygame.draw.circle(self.screen, (128, 128, 128), (scaledX, scaledY), pointSize)
 
 			if self.ball.surrounds((scaledX, scaledY)):
 
