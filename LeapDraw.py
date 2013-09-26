@@ -1,9 +1,7 @@
-import sys
-import Leap
+import sys, random, os, string
+import Leap, pygame
 from Leap import SwipeGesture
-import pygame
 from pygame.locals import *
-import random
 
 pygame.init()
 
@@ -12,6 +10,8 @@ available_resolutions = pygame.display.list_modes()
 WIDTH = available_resolutions[0][0]
 HEIGHT = available_resolutions[0][1]
 SIZE = WIDTH, HEIGHT
+
+SSHOT_FOLDER = 'screenshots'
 
 class Cursor(pygame.sprite.Sprite):
     def __init__(self):
@@ -109,7 +109,8 @@ class EduListener(Leap.Listener):
 		if distance <= 0.5 and distance > 0:
 
 			self.draw_on = False
-			self.color = (random.randrange(256), random.randrange(256), random.randrange(256)) # generates random color
+			# self.color = (random.randrange(256), random.randrange(256), random.randrange(256)) # generates random color
+			self.color = (255, 255, 0) # Sets color to yellow
 
 			self.cursor.image = self.cursor.scale_cursor(distance)
 
@@ -152,6 +153,21 @@ class EduListener(Leap.Listener):
 
 			pygame.draw.circle(srf,color,(x,y),radius)
 
+def initailizePictureFolder():
+	if not os.path.isdir(SSHOT_FOLDER):
+		print "Creating folder"
+		os.mkdir(SSHOT_FOLDER)
+
+def analyzeImage(filepath):
+	os.system("tesseract " + filepath + " out -psm 8")
+	with open('out.txt', 'r') as fin:
+		contents = ""
+		for line in fin:
+			contents += line
+
+	os.remove('out.txt')
+	return contents 
+
 def runPygame(leapController, leapListener):
 
 	screen = pygame.display.set_mode(SIZE)
@@ -159,6 +175,7 @@ def runPygame(leapController, leapListener):
 	background.fill((0,0,0))
 	screen.blit(background, (0,0))
 	pygame.display.set_caption("LEAPS.edu")
+	font = pygame.font.SysFont("Comic Sans MS", 200)
 
 	cursor = Cursor()
 	allSprites = pygame.sprite.Group(cursor)
@@ -169,15 +186,28 @@ def runPygame(leapController, leapListener):
 	leapListener.allSprites = allSprites
 	leapListener.screen = screen
 
+	imageCounter = 1
+	# Running the pygame loop
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				leapController.remove_listener(leapListener)
 				pygame.quit()
-				break
+				sys.exit()
 			if event.type == pygame.KEYDOWN:
-				# print "Key pressed"
-				pygame.image.save(leapListener.screen, 'test2.png')
+				imageFilename = os.path.join(SSHOT_FOLDER, 'test' + str(imageCounter) + '.png')
+				print "Image saved as", imageFilename
+				pygame.image.save(leapListener.screen, imageFilename)
+				imageCounter += 1
+
+				result = analyzeImage(imageFilename)
+				cleanedResults = [x for x in result if x in string.ascii_letters]
+				result = ''.join(cleanedResults)
+				print "Results: ", result
+				label = font.render(result, 1, (255, 255, 0)) # Makes yellow label
+				screen.fill((0,0,0))
+				screen.blit(label, (100, 100))
+
 
 
 def main():
@@ -185,11 +215,12 @@ def main():
 	listener = EduListener()
 	controller.add_listener(listener)
 
+	initailizePictureFolder()
+
 	runPygame(controller, listener)
 
 	controller.remove_listener(listener)
 
 
 if __name__ == '__main__':
-
 	main()
