@@ -14,32 +14,31 @@ SIZE = WIDTH, HEIGHT
 SSHOT_FOLDER = 'screenshots'
 
 class Cursor(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((50, 50))
-        self.image.fill((0, 255, 255))
-        # pygame.draw.circle(self.image, (0, 0, 255), (25, 25), 25, 0)
-        self.rect = self.image.get_rect()
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.Surface((50, 50))
+		self.image.fill((0, 255, 255)) # Make the cursor cyan
+		# pygame.draw.circle(self.image, (0, 0, 255), (25, 25), 25, 0)
+		self.rect = self.image.get_rect()
 
-        
-    def update(self, position):
-        self.rect.center = position
+		
+	def update(self, position):
+		self.rect.center = position
 
-    def scale_cursor(self, multiple):
-    	height = int(multiple * 150)
-    	width = int(multiple * 150)
-    	
-    	newResolution = (width, height)
-    	previousCursor = self.image
-    	
-    	
-    	self.image = pygame.transform.smoothscale(previousCursor, newResolution)
-    	self.image.fill((0,255,255))
-    	return self.image
+	def scale_cursor(self, multiple):
+		height = int(multiple * 150)
+		width = int(multiple * 150)
+		
+		newResolution = (width, height)
+		previousCursor = self.image
+		
+		self.image = pygame.transform.smoothscale(previousCursor, newResolution)
+		self.image.fill((0,255,255))
+		return self.image
 
-    def change_fill(self):
-    	self.image.fill((0,0,0))
-    	return self.image 
+	def change_fill(self):
+		self.image.fill((0,0,0))
+		return self.image 
 
 class EduListener(Leap.Listener):
 
@@ -50,6 +49,7 @@ class EduListener(Leap.Listener):
 		self.color = 255,128,0
 		self.radius = 10
 
+		# Initialize all to 0, they will be set later
 		self.screen = 0
 		self.background = 0
 		self.cursor = 0
@@ -84,14 +84,14 @@ class EduListener(Leap.Listener):
 		if self.background == 0:
 			return
 
-		frame = controller.frame()
-		interactionBox = frame.interaction_box
+		frame = controller.frame() # The frame of info from the leap
+		interactionBox = frame.interaction_box # The 3D box where we "draw"
 
 		finger = frame.fingers.frontmost
 		zone = finger.touch_zone
 		distance = finger.touch_distance
 		
-		stabilizedPosition = finger.stabilized_tip_position
+		stabilizedPosition = finger.stabilized_tip_position # Stabilized tip position for smoother movement at the cost of accuracy/speed
 
 		normalizedPosition = interactionBox.normalize_point(stabilizedPosition)
 		
@@ -154,71 +154,80 @@ class EduListener(Leap.Listener):
 			pygame.draw.circle(srf,color,(x,y),radius)
 
 def initailizePictureFolder():
-	if not os.path.isdir(SSHOT_FOLDER):
-		print "Creating folder"
-		os.mkdir(SSHOT_FOLDER)
+	if not os.path.isdir(SSHOT_FOLDER): # If the screenshot folder doesn't exist
+		print "Creating folder" # Debug output
+		os.mkdir(SSHOT_FOLDER) # Make the folder
 
 def analyzeImage(filepath):
-	os.system("tesseract " + filepath + " out -psm 8")
-	with open('out.txt', 'r') as fin:
+	tempFile = "out" # Name of output from tesseract
+	tempFileExt = ".txt" # CONSTANT - DON'T CHANGE (comes from tesseract, not under our control)
+	os.system("tesseract " + filepath + " " + tempFile + " -psm 8") # Call tesseract with the options
+	tempFile += tempFileExt # Adding the extension on for all future use
+	with open(tempFile, 'r') as fin: # Open the output from tesseract
 		contents = ""
-		for line in fin:
+		for line in fin: # Grab all info from in-file
 			contents += line
 
-	os.remove('out.txt')
-	return contents 
+	os.remove(tempFile) # Delete the output file from tesseract
+	return contents
 
 def runPygame(leapController, leapListener):
 
-	screen = pygame.display.set_mode(SIZE)
-	background = pygame.Surface(screen.get_size())
-	background.fill((0,0,0))
-	screen.blit(background, (0,0))
-	pygame.display.set_caption("LEAPS.edu")
-	font = pygame.font.SysFont("Comic Sans MS", 200)
+	# Initialize the pygame stuff
+	screen = pygame.display.set_mode(SIZE) # Make the pygame window
+	background = pygame.Surface(screen.get_size()) # Get the Surface for the background of the window with the size of the window
+	background.fill((0,0,0)) # Fill the background with black
+	screen.blit(background, (0,0)) # Put the background onto the screen
+	pygame.display.set_caption("LEAPS.edu") # Set the title of the pygame window
+	font = pygame.font.SysFont("Comic Sans MS", 200) # Create a font for displaying text in the window
 
-	cursor = Cursor()
-	allSprites = pygame.sprite.Group(cursor)
+	cursor = Cursor() # Create a cursor sprite
+	allSprites = pygame.sprite.Group(cursor) # Create a sprite group out of the cursor
 
-	# Adding pygame info to listener
-	leapListener.background = background
+	# Adding pygame info to the leap listener
+	leapListener.background = background 
 	leapListener.cursor = cursor
 	leapListener.allSprites = allSprites
 	leapListener.screen = screen
 
+	# Counter for screen shots, just so we're not overwriting the old one with the new
 	imageCounter = 1
 	# Running the pygame loop
 	while True:
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				leapController.remove_listener(leapListener)
-				pygame.quit()
-				sys.exit()
-			if event.type == pygame.KEYDOWN:
-				imageFilename = os.path.join(SSHOT_FOLDER, 'test' + str(imageCounter) + '.png')
-				print "Image saved as", imageFilename
-				pygame.image.save(leapListener.screen, imageFilename)
-				imageCounter += 1
+		for event in pygame.event.get(): # Get all events and loop over
+			if event.type == pygame.QUIT: # If the window has been X'ed out
+				leapController.remove_listener(leapListener) # Remove the listener
+				pygame.quit() # Quit pygame
+				sys.exit() # Quit python
+			if event.type == pygame.KEYDOWN: # Keypressed
+				imageFilename = os.path.join(SSHOT_FOLDER, 'test' + str(imageCounter) + '.png') # Create screenshot filename
+				print "Image saved as", imageFilename # Debug output
+				pygame.image.save(leapListener.screen, imageFilename) # Save screenshot
+				imageCounter += 1 # Increment the screenshot number
 
-				result = analyzeImage(imageFilename)
-				cleanedResults = [x for x in result if x in string.ascii_letters]
-				result = ''.join(cleanedResults)
-				print "Results: ", result
+				result = analyzeImage(imageFilename) # Call analyzer function, store result
+				cleanedResults = [x for x in result if x in string.ascii_letters] # Make a list, remove all non-ascii characters
+				result = ''.join(cleanedResults) # Store the cleaned stuff back into result
+				print "Results: ", result # Debug output
 				label = font.render(result, 1, (255, 255, 0)) # Makes yellow label
-				screen.fill((0,0,0))
-				screen.blit(label, (100, 100))
+				screen.fill((0,0,0)) # Fills screen with black
+				screen.blit(label, (100, 100)) # Copies the label text onto the screen Surface
 
 
 
 def main():
+	# Initialize Leap stuff
 	controller = Leap.Controller()
 	listener = EduListener()
 	controller.add_listener(listener)
 
+	# Make a folder for screen shots if one doesn't exist
 	initailizePictureFolder()
 
+	# Run the function for all pygame behavior
 	runPygame(controller, listener)
 
+	# Once the game is done, remove the listener
 	controller.remove_listener(listener)
 
 
