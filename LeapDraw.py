@@ -20,16 +20,17 @@ class Cursor(pygame.sprite.Sprite):
         self.image.fill((0, 255, 255))
         # pygame.draw.circle(self.image, (0, 0, 255), (25, 25), 25, 0)
         self.rect = self.image.get_rect()
-
+        self.height= 0 
+        self.width = 0
         
     def update(self, position):
         self.rect.center = position
 
     def scale_cursor(self, multiple):
-    	height = int(multiple * 150)
-    	width = int(multiple * 150)
+    	self.height = int(multiple * 150)
+    	self.width = int(multiple * 150)
     	
-    	newResolution = (width, height)
+    	newResolution = (self.width, self.height)
     	previousCursor = self.image
     	
     	
@@ -40,6 +41,12 @@ class Cursor(pygame.sprite.Sprite):
     def change_fill(self):
     	self.image.fill((0,0,0))
     	return self.image 
+
+    def get_dimention(self):
+
+
+    	return self.height
+
 
 class EduListener(Leap.Listener):
 
@@ -115,11 +122,12 @@ class EduListener(Leap.Listener):
 
 			self.allSprites.clear(self.screen, self.background)
 			self.allSprites.update(finger_pos)
-			self.allSprites.draw(self.screen)
+
+
 
 		if self.draw_on: # if holding down mouse click
-			pygame.draw.circle(self.screen, self.color, finger_pos, self.radius) #draw a circle at new mouse position
-			self.round_line(self.screen, self.color, finger_pos, self.last_position, self.radius) # connects the 2 circles together to form a line
+			pygame.draw.circle(self.background, self.color, finger_pos, self.radius) #draw a circle at new mouse position
+			self.round_line(self.background, self.color, finger_pos, self.last_position, self.radius) # connects the 2 circles together to form a line
 
 		self.last_position = finger_pos # update the last position to the position you ended the line on
 	
