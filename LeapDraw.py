@@ -41,19 +41,19 @@ class Cursor(pygame.sprite.Sprite):
     	self.image.fill((0,0,0))
     	return self.image 
 
-class MyListener(Leap.Listener):
+class EduListener(Leap.Listener):
 
-	def __init__(self, screen, background, cursor, sprites):
+	def __init__(self):
 		Leap.Listener.__init__(self)
 		self.draw_on = False
 		self.last_position = (0,0)
 		self.color = 255,128,0
 		self.radius = 10
 
-		self.screen = screen
-		self.background = background
-		self.cursor = cursor
-		self.allSprites = sprites
+		self.screen = 0
+		self.background = 0
+		self.cursor = 0
+		self.allSprites = 0
 
 		print "Initialized"
 
@@ -70,8 +70,6 @@ class MyListener(Leap.Listener):
 		print "Exited"
 
 	def on_frame(self, controller):
-
-
 		"""
 		9/16/13
 
@@ -82,6 +80,9 @@ class MyListener(Leap.Listener):
 
 		Get circle scaling right in scale_cursor function
 		"""
+
+		if self.background == 0:
+			return
 
 		frame = controller.frame()
 		interactionBox = frame.interaction_box
@@ -95,7 +96,7 @@ class MyListener(Leap.Listener):
 		normalizedPosition = interactionBox.normalize_point(stabilizedPosition)
 		
 		x = normalizedPosition.x * WIDTH
-		y = HEIGHT - normalizedPosition.y * HEIGHT
+		y = HEIGHT * (1 - normalizedPosition.y)
 
 		finger_pos = (int(x),int(y))
 
@@ -151,23 +152,40 @@ class MyListener(Leap.Listener):
 
 			pygame.draw.circle(srf,color,(x,y),radius)
 
-def main():
+def runPygame(leapController, leapListener):
 
 	screen = pygame.display.set_mode(SIZE)
 	background = pygame.Surface(screen.get_size())
 	background.fill((0,0,0))
 	screen.blit(background, (0,0))
 	pygame.display.set_caption("LEAPS.edu")
-	
+
 	cursor = Cursor()
-	allSprites = pygame.sprite.Group(cursor)	
+	allSprites = pygame.sprite.Group(cursor)
 
+	# Adding pygame info to listener
+	leapListener.background = background
+	leapListener.cursor = cursor
+	leapListener.allSprites = allSprites
+	leapListener.screen = screen
+
+	while True:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				leapController.remove_listener(leapListener)
+				pygame.quit()
+				break
+			if event.type == pygame.KEYDOWN:
+				# print "Key pressed"
+				pygame.image.save(leapListener.screen, 'test2.png')
+
+
+def main():
 	controller = Leap.Controller()
-	listener = MyListener(screen, background, cursor, allSprites)
-
+	listener = EduListener()
 	controller.add_listener(listener)
 
-	sys.stdin.readline()
+	runPygame(controller, listener)
 
 	controller.remove_listener(listener)
 
@@ -175,4 +193,3 @@ def main():
 if __name__ == '__main__':
 
 	main()
-

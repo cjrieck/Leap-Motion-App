@@ -1,4 +1,0 @@
-Goals and Deadlines:
-
-Week 3:
-	Goal: Be able to draw something using Pygame and Leap Motion. Meeting on Saturday to discuss and implement
