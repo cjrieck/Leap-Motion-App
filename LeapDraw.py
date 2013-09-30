@@ -20,8 +20,8 @@ class Cursor(pygame.sprite.Sprite):
 		self.image.fill((0, 255, 255)) # Make the cursor cyan
 		# pygame.draw.circle(self.image, (0, 0, 255), (25, 25), 25, 0)
 		self.rect = self.image.get_rect()
-        self.height = 0 
-        self.width = 0
+		self.height = 0 
+		self.width = 0
 		
 	def update(self, position):
 		self.rect.center = position
