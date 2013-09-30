@@ -1,3 +1,8 @@
+# Pygame control happens in runPygame
+# Leap Motion control happens in on_frame
+# Initialization happens in main
+
+
 import sys, random, os, string
 import Leap, pygame
 from Leap import SwipeGesture
@@ -18,10 +23,9 @@ class Cursor(pygame.sprite.Sprite):
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.Surface((50, 50))
 		self.image.fill((0, 255, 255)) # Make the cursor cyan
-		# pygame.draw.circle(self.image, (0, 0, 255), (25, 25), 25, 0)
 		self.rect = self.image.get_rect()
-        self.height = 0 
-        self.width = 0
+		self.height = 0
+		self.width = 0
 		
 	def update(self, position):
 		self.rect.center = position
@@ -43,7 +47,6 @@ class Cursor(pygame.sprite.Sprite):
 
 
 class EduListener(Leap.Listener):
-
 	def __init__(self):
 		Leap.Listener.__init__(self)
 		self.draw_on = False
@@ -156,7 +159,7 @@ class EduListener(Leap.Listener):
 
 			pygame.draw.circle(srf,color,(x,y),radius)
 
-def initailizePictureFolder():
+def initGame():
 	if not os.path.isdir(SSHOT_FOLDER): # If the screenshot folder doesn't exist
 		print "Creating folder" # Debug output
 		os.mkdir(SSHOT_FOLDER) # Make the folder
@@ -225,7 +228,7 @@ def main():
 	controller.add_listener(listener)
 
 	# Make a folder for screen shots if one doesn't exist
-	initailizePictureFolder()
+	initGame()
 
 	# Run the function for all pygame behavior
 	runPygame(controller, listener)
