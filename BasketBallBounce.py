@@ -136,12 +136,19 @@ def main():
 	# Have the sample listener receive events from the controller
 	controller.add_listener(listener)
 
-	# Keep this process running until Enter is pressed
-	print "Press Enter to quit..."
-	sys.stdin.readline()
+	while True:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				controller.remove_listener(listener)
+				pygame.quit()
+				break
+			if event.type == pygame.KEYDOWN:
+				# print "Key pressed"
+				pygame.image.save(listener.screen, 'test.png')
+
+	# sys.stdin.readline()
 
 	# Remove the sample listener when done
-	controller.remove_listener(listener)
 
 if __name__ == "__main__":
 	main()
