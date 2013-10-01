@@ -16,27 +16,42 @@ SSHOT_FOLDER = 'screenshots'
 class Cursor(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface((50, 50))
+		self.image = pygame.Surface((50, 50)) # 50x50 pixel pygame surface
 		self.image.fill((0, 255, 255)) # Make the cursor cyan
 		# pygame.draw.circle(self.image, (0, 0, 255), (25, 25), 25, 0)
-		self.rect = self.image.get_rect()
+		self.rect = self.image.get_rect() # returns rectangle that bounds this image
 		self.height = 0 
 		self.width = 0
-		
+	
+	"""
+	Function: update(self, position)
+	Arguments: position -> position of the finger relative to the screen
+	Moves the cursor along with the finger
+	"""
 	def update(self, position):
 		self.rect.center = position
 
+	"""
+	Function: scale_cursor(self, multiple)
+	Arguments: multiple -> number less than 1 (finger distance from the 'touch' zone)
+	Will scale the square cursor relative to how far the tip of the User's
+	finger is from the 'touch' or drawing zone
+	"""
 	def scale_cursor(self, multiple):
+		# scale the cursor dimensions
 		self.height = int(multiple * 150)
 		self.width = int(multiple * 150)
 		
 		newResolution = (self.width, self.height)
 		previousCursor = self.image
 		
-		self.image = pygame.transform.smoothscale(previousCursor, newResolution)
-		self.image.fill((0,255,255))
+		self.image = pygame.transform.smoothscale(previousCursor, newResolution) # set the new cursor to a new image with new dimensions
+		self.image.fill((0,255,255)) # keep color the same
 		return self.image
 
+	"""
+	Change the fill of the image from cyan to black
+	"""
 	def change_fill(self):
 		self.image.fill((0,0,0))
 		return self.image
@@ -78,46 +93,41 @@ class EduListener(Leap.Listener):
 		Figure out how to save what was drawn on the screen when you
 		go back to hovering. Screenshot it then blit the background
 		again as that screenshot?
-
-
-		Get circle scaling right in scale_cursor function
 		"""
 
 		if self.background == 0:
 			return
 
 		frame = controller.frame() # The frame of info from the leap
-		interactionBox = frame.interaction_box # The 3D box where we "draw"
+		interactionBox = frame.interaction_box # equivalent to a point cloud in 3-space
 
 		finger = frame.fingers.frontmost
-		zone = finger.touch_zone
 		distance = finger.touch_distance
 		
 		stabilizedPosition = finger.stabilized_tip_position # Stabilized tip position for smoother movement at the cost of accuracy/speed
 
 		normalizedPosition = interactionBox.normalize_point(stabilizedPosition)
 		
+		# Keeps the finger point within the dimensions of the screen
 		x = normalizedPosition.x * WIDTH
 		y = HEIGHT * (1 - normalizedPosition.y)
 
-		finger_pos = (int(x),int(y))
+		finger_pos = (int(x),int(y)) # convert coordinates to a point
 
-		if distance <= -0.001:
+		if distance <= -0.001: # if in the 'touch zone'
 			
 			pygame.draw.circle(self.screen, self.color, finger_pos, self.radius) # defines the brush and size of the brush
 			self.draw_on = True
-			# self.cursor.image = self.cursor.change_fill()
 
-		if distance <= 0.5 and distance > 0:
+		if distance <= 0.5 and distance > 0: # if in the 'hover zone'
 
 			self.draw_on = False
-			# self.color = (random.randrange(256), random.randrange(256), random.randrange(256)) # generates random color
 			self.color = (255, 255, 0) # Sets color to yellow
 
-			self.cursor.image = self.cursor.scale_cursor(distance)
+			self.cursor.image = self.cursor.scale_cursor(distance) #change cursor dimensions based on distance from 'touch zone'
 
-			self.allSprites.clear(self.screen, self.background)
-			self.allSprites.update(finger_pos)
+			self.allSprites.clear(self.screen, self.background) # clear sprites from last draw() call on the group
+			self.allSprites.update(finger_pos) # updates sprites on the screen
 
 
 
@@ -127,8 +137,8 @@ class EduListener(Leap.Listener):
 
 		self.last_position = finger_pos # update the last position to the position you ended the line on
 	
-		if (not frame.gestures().is_empty) and (distance > 0 and (not self.draw_on)):
-			self.screen.fill((0,0,0))
+		if (not frame.gestures().is_empty) and (distance > 0 and (not self.draw_on)): # if swipe while not drawing
+			self.screen.fill((0,0,0)) # make the screen black
 
 		pygame.display.flip() # Update full display Surface to the screen
 
