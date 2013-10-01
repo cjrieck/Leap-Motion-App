@@ -24,7 +24,11 @@ class Cursor(pygame.sprite.Sprite):
 		self.image = pygame.Surface((50, 50))
 		self.image.fill((0, 255, 255)) # Make the cursor cyan
 		self.rect = self.image.get_rect()
+<<<<<<< HEAD
 		self.height = 0
+=======
+		self.height = 0 
+>>>>>>> 430429209539f4d964980985defaa716c43781c0
 		self.width = 0
 		
 	def update(self, position):
