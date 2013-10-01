@@ -68,13 +68,12 @@ class EduListener(Leap.Listener):
 		# Initialize all to 0, they will be set later
 		self.screen = 0
 		self.background = 0
+		self.cursorSurface = 0
 		self.cursor = 0
 		self.allSprites = 0
 
 		self.counter = 0
 		self.last_position = (0,0)
-
-		self.rectSurf = 0
 
 		print "Initialized"
 
@@ -117,9 +116,11 @@ class EduListener(Leap.Listener):
 		if distance <= 0.5 and distance > 0:
 			self.cursor.image = self.cursor.scale_cursor(distance) #change cursor dimensions based on distance from 'touch zone'
 			
-			self.allSprites.draw(self.background)
-			self.allSprites.clear(self.background, ) # clear sprites from last draw() call on the group
-			self.allSprites.update(finger_pos) # updates sprites on the screen		
+			# ------------ Work on cursor rendering in here -----------
+
+			# self.allSprites.draw(self.cursorSurface)
+			# self.allSprites.clear(self.cursorSurface, self.background) # clear sprites from last draw() call on the group
+			# self.allSprites.update(finger_pos) # updates sprites on the screen		
 
 		self.last_position = finger_pos
 		if (not self.frame.gestures().is_empty) and (distance > 0 and (not self.draw_on)): # if swipe while not drawing
@@ -172,6 +173,9 @@ def runPygame(leapController, leapListener):
 	# Initialize the pygame stuff
 	screen = pygame.display.set_mode(SIZE) # Make the pygame window
 	background = pygame.Surface(screen.get_size()) # Get the Surface for the background of the window with the size of the window
+	cursorSurface = pygame.Surface(screen.get_size(), pygame.SRCALPHA, 32)
+	cursorSurface = cursorSurface.convert_alpha()
+
 	background.fill((0,0,0)) # Fill the background with black
 	screen.blit(background, (0,0)) # Put the background onto the screen
 	pygame.display.set_caption("LEAPS.edu") # Set the title of the pygame window
@@ -181,7 +185,8 @@ def runPygame(leapController, leapListener):
 	allSprites = pygame.sprite.Group(cursor) # Create a sprite group out of the cursor
 
 	# Adding pygame info to the leap listener
-	leapListener.background = background 
+	leapListener.background = background
+	leapListener.cursorSurface = cursorSurface
 	leapListener.cursor = cursor
 	leapListener.allSprites = allSprites
 	leapListener.screen = screen
@@ -231,7 +236,7 @@ def runPygame(leapController, leapListener):
 			if event.type == pygame.KEYDOWN: # Keypressed
 				imageFilename = os.path.join(SSHOT_FOLDER, 'test' + str(imageCounter) + '.png') # Create screenshot filename
 				print "Image saved as", imageFilename # Debug output
-				pygame.image.save(leapListener.screen, imageFilename) # Save screenshot
+				pygame.image.save(screen, imageFilename) # Save screenshot
 				imageCounter += 1 # Increment the screenshot number
 
 				result = analyzeImage(imageFilename) # Call analyzer function, store result
