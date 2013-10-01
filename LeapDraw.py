@@ -111,18 +111,15 @@ class EduListener(Leap.Listener):
 
 		if distance <= 0.5 and distance > 0:
 			self.cursor.image = self.cursor.scale_cursor(distance) #change cursor dimensions based on distance from 'touch zone'
+			
+			# self.allSprites.draw(self.screen)
 			self.allSprites.clear(self.screen, self.background) # clear sprites from last draw() call on the group
-			self.allSprites.update(finger_pos) # updates sprites on the screen
-
-		if self.draw_on:
-			pygame.draw.circle(self.background, self.color, finger_pos, self.radius) #draw a circle at new mouse position
-			self.round_line(self.background, self.color, finger_pos, self.last_position, self.radius) 
+			self.allSprites.update(finger_pos) # updates sprites on the screen		
 
 		self.last_position = finger_pos
 		if (not self.frame.gestures().is_empty) and (distance > 0 and (not self.draw_on)): # if swipe while not drawing
 			self.screen.fill((0,0,0)) # make the screen black
 
-			pygame.display.flip() # update screen
 	"""
 	Function:
 	Allows for the connection of 2 circles to create a line.
@@ -145,6 +142,7 @@ class EduListener(Leap.Listener):
 			y = int(start[1] + float(i)/distance*dy)
 
 			pygame.draw.circle(srf,color,(x,y),radius)
+
 
 def initailizePictureFolder():
 	if not os.path.isdir(SSHOT_FOLDER): # If the screenshot folder doesn't exist
@@ -214,11 +212,11 @@ def runPygame(leapController, leapListener):
 			leapListener.draw_on = False
 			leapListener.color = (255, 255, 0) # Sets color to yellow
 
-		# if leapListener.draw_on: # if holding down mouse click
-		# 	pygame.draw.circle(background, leapListener.color, finger_pos, leapListener.radius) #draw a circle at new mouse position
-		# 	leapListener.round_line(background, leapListener.color, finger_pos, last_position, leapListener.radius) # connects the 2 circles together to form a line
+		if leapListener.draw_on: # if holding down mouse click
+			pygame.draw.circle(background, leapListener.color, finger_pos, leapListener.radius) #draw a circle at new mouse position
+			leapListener.round_line(screen, leapListener.color, finger_pos, last_position, leapListener.radius) # connects the 2 circles together to form a line
 		
-		# last_position = finger_pos # update the last position to the position you ended the line on
+		last_position = finger_pos # update the last position to the position you ended the line on
 		
 		for event in pygame.event.get(): # Get all events and loop over
 			if event.type == pygame.QUIT: # If the window has been X'ed out
