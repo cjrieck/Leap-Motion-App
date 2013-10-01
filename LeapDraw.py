@@ -73,6 +73,9 @@ class EduListener(Leap.Listener):
 
 		self.counter = 0
 		self.last_position = (0,0)
+
+		self.rectSurf = 0
+
 		print "Initialized"
 
 	def on_connect(self, controller):
@@ -109,11 +112,13 @@ class EduListener(Leap.Listener):
 
 		finger_pos = (int(x),int(y))
 
+		# self.rectSurf = pygame.Surface((int(self.cursor.width), int(self.cursor.height)), self.background)
+
 		if distance <= 0.5 and distance > 0:
 			self.cursor.image = self.cursor.scale_cursor(distance) #change cursor dimensions based on distance from 'touch zone'
 			
-			# self.allSprites.draw(self.screen)
-			self.allSprites.clear(self.screen, self.background) # clear sprites from last draw() call on the group
+			self.allSprites.draw(self.background)
+			self.allSprites.clear(self.background, ) # clear sprites from last draw() call on the group
 			self.allSprites.update(finger_pos) # updates sprites on the screen		
 
 		self.last_position = finger_pos
@@ -213,7 +218,7 @@ def runPygame(leapController, leapListener):
 			leapListener.color = (255, 255, 0) # Sets color to yellow
 
 		if leapListener.draw_on: # if holding down mouse click
-			pygame.draw.circle(background, leapListener.color, finger_pos, leapListener.radius) #draw a circle at new mouse position
+			pygame.draw.circle(screen, leapListener.color, finger_pos, leapListener.radius) #draw a circle at new mouse position
 			leapListener.round_line(screen, leapListener.color, finger_pos, last_position, leapListener.radius) # connects the 2 circles together to form a line
 		
 		last_position = finger_pos # update the last position to the position you ended the line on
