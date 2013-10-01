@@ -5,8 +5,8 @@ from pygame.locals import *
 
 pygame.init()
 
+# Retrieve highest available screen resolution and set window dimensions to that
 available_resolutions = pygame.display.list_modes()
-
 WIDTH = available_resolutions[0][0]
 HEIGHT = available_resolutions[0][1]
 SIZE = WIDTH, HEIGHT
@@ -62,7 +62,6 @@ class EduListener(Leap.Listener):
 	def __init__(self):
 		Leap.Listener.__init__(self)
 		self.draw_on = False
-		self.last_position = (0,0)
 		self.color = 255,128,0
 		self.radius = 10
 
@@ -72,6 +71,8 @@ class EduListener(Leap.Listener):
 		self.cursor = 0
 		self.allSprites = 0
 
+		self.counter = 0
+		self.last_position = (0,0)
 		print "Initialized"
 
 	def on_connect(self, controller):
@@ -87,62 +88,41 @@ class EduListener(Leap.Listener):
 		print "Exited"
 
 	def on_frame(self, controller):
-		"""
-		9/16/13
 
-		Figure out how to save what was drawn on the screen when you
-		go back to hovering. Screenshot it then blit the background
-		again as that screenshot?
-		"""
-
+		self.counter += 1
+		print "In on_frame", self.counter
 		if self.background == 0:
 			return
 
-		frame = controller.frame() # The frame of info from the leap
-		interactionBox = frame.interaction_box # equivalent to a point cloud in 3-space
+		self.frame = controller.frame() # The frame of info from the leap
+		interactionBox = self.frame.interaction_box # equivalent to a point cloud in 3-space
 
-		finger = frame.fingers.frontmost
+		self.gestures = self.frame.gestures() # get activated gestures if present
+
+		finger = self.frame.fingers.frontmost
 		distance = finger.touch_distance
-		
 		stabilizedPosition = finger.stabilized_tip_position # Stabilized tip position for smoother movement at the cost of accuracy/speed
-
 		normalizedPosition = interactionBox.normalize_point(stabilizedPosition)
-		
-		# Keeps the finger point within the dimensions of the screen
+
 		x = normalizedPosition.x * WIDTH
 		y = HEIGHT * (1 - normalizedPosition.y)
 
-		finger_pos = (int(x),int(y)) # convert coordinates to a point
+		finger_pos = (int(x),int(y))
 
-		if distance <= -0.001: # if in the 'touch zone'
-			
-			pygame.draw.circle(self.screen, self.color, finger_pos, self.radius) # defines the brush and size of the brush
-			self.draw_on = True
-
-		if distance <= 0.5 and distance > 0: # if in the 'hover zone'
-
-			self.draw_on = False
-			self.color = (255, 255, 0) # Sets color to yellow
-
+		if distance <= 0.5 and distance > 0:
 			self.cursor.image = self.cursor.scale_cursor(distance) #change cursor dimensions based on distance from 'touch zone'
-
 			self.allSprites.clear(self.screen, self.background) # clear sprites from last draw() call on the group
 			self.allSprites.update(finger_pos) # updates sprites on the screen
 
-
-
-		if self.draw_on: # if holding down mouse click
+		if self.draw_on:
 			pygame.draw.circle(self.background, self.color, finger_pos, self.radius) #draw a circle at new mouse position
-			self.round_line(self.background, self.color, finger_pos, self.last_position, self.radius) # connects the 2 circles together to form a line
+			self.round_line(self.background, self.color, finger_pos, self.last_position, self.radius) 
 
-		self.last_position = finger_pos # update the last position to the position you ended the line on
-	
-		if (not frame.gestures().is_empty) and (distance > 0 and (not self.draw_on)): # if swipe while not drawing
+		self.last_position = finger_pos
+		if (not self.frame.gestures().is_empty) and (distance > 0 and (not self.draw_on)): # if swipe while not drawing
 			self.screen.fill((0,0,0)) # make the screen black
 
-		pygame.display.flip() # Update full display Surface to the screen
-
-
+			pygame.display.flip() # update screen
 	"""
 	Function:
 	Allows for the connection of 2 circles to create a line.
@@ -205,8 +185,41 @@ def runPygame(leapController, leapListener):
 
 	# Counter for screen shots, just so we're not overwriting the old one with the new
 	imageCounter = 1
+
+	last_position = (0,0)
 	# Running the pygame loop
 	while True:
+
+		frame = leapController.frame() # The frame of info from the leap
+		interactionBox = frame.interaction_box # equivalent to a point cloud in 3-space
+		gestures = frame.gestures()
+		finger = frame.fingers.frontmost
+		distance = finger.touch_distance
+		stabilizedPosition = finger.stabilized_tip_position # Stabilized tip position for smoother movement at the cost of accuracy/speed
+		normalizedPosition = interactionBox.normalize_point(stabilizedPosition)
+		
+		# Keeps the finger point within the dimensions of the screen
+		x = normalizedPosition.x * WIDTH
+		y = HEIGHT * (1 - normalizedPosition.y)
+
+		finger_pos = (int(x),int(y))
+
+		if distance <= -0.001: # if in the 'touch zone'
+			
+			pygame.draw.circle(screen, leapListener.color, finger_pos, leapListener.radius) # defines the brush and size of the brush
+			leapListener.draw_on = True
+
+		if distance <= 0.5 and distance > 0: # if in the 'hover zone'
+
+			leapListener.draw_on = False
+			leapListener.color = (255, 255, 0) # Sets color to yellow
+
+		# if leapListener.draw_on: # if holding down mouse click
+		# 	pygame.draw.circle(background, leapListener.color, finger_pos, leapListener.radius) #draw a circle at new mouse position
+		# 	leapListener.round_line(background, leapListener.color, finger_pos, last_position, leapListener.radius) # connects the 2 circles together to form a line
+		
+		# last_position = finger_pos # update the last position to the position you ended the line on
+		
 		for event in pygame.event.get(): # Get all events and loop over
 			if event.type == pygame.QUIT: # If the window has been X'ed out
 				leapController.remove_listener(leapListener) # Remove the listener
@@ -226,6 +239,7 @@ def runPygame(leapController, leapListener):
 				screen.fill((0,0,0)) # Fills screen with black
 				screen.blit(label, (100, 100)) # Copies the label text onto the screen Surface
 
+		pygame.display.flip() # Update full display Surface to the screen
 
 
 def main():
