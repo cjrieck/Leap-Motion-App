@@ -1,3 +1,7 @@
+# Pygame control happens in runPygame
+# Leap Motion control happens in on_frame
+# Initialization happens in main
+
 import sys, random, os, string
 import Leap, pygame
 from Leap import SwipeGesture
@@ -5,58 +9,19 @@ from pygame.locals import *
 
 pygame.init()
 
+# Retrieve highest available screen resolution and set window dimensions to that
 available_resolutions = pygame.display.list_modes()
-
+BLACK = (0, 0, 0)
 WIDTH = available_resolutions[0][0]
 HEIGHT = available_resolutions[0][1]
+WIDTH, HEIGHT = WIDTH//2, HEIGHT//2
 SIZE = WIDTH, HEIGHT
 
-SSHOT_FOLDER = 'screenshots'
+SCREENSHOT_FOLDER = 'screenshots'
 
-class Cursor(pygame.sprite.Sprite):
-	def __init__(self):
-		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface((50, 50))
-		self.image.fill((0, 255, 255)) # Make the cursor cyan
-		# pygame.draw.circle(self.image, (0, 0, 255), (25, 25), 25, 0)
-		self.rect = self.image.get_rect()
-		self.height = 0 
-		self.width = 0
-		
-	def update(self, position):
-		self.rect.center = position
-
-	def scale_cursor(self, multiple):
-		self.height = int(multiple * 150)
-		self.width = int(multiple * 150)
-		
-		newResolution = (self.width, self.height)
-		previousCursor = self.image
-		
-		self.image = pygame.transform.smoothscale(previousCursor, newResolution)
-		self.image.fill((0,255,255))
-		return self.image
-
-	def change_fill(self):
-		self.image.fill((0,0,0))
-		return self.image
-
-
-class EduListener(Leap.Listener):
-
-	def __init__(self):
-		Leap.Listener.__init__(self)
-		self.draw_on = False
-		self.last_position = (0,0)
-		self.color = 255,128,0
-		self.radius = 10
-
-		# Initialize all to 0, they will be set later
-		self.screen = 0
-		self.background = 0
-		self.cursor = 0
-		self.allSprites = 0
-
+class LeapDataListener(Leap.Listener):
+	def on_init(self, controller):
+		self.storage = {}
 		print "Initialized"
 
 	def on_connect(self, controller):
@@ -72,94 +37,100 @@ class EduListener(Leap.Listener):
 		print "Exited"
 
 	def on_frame(self, controller):
-		"""
-		9/16/13
+		self.frame = controller.frame() # The frame of info from the leap
+		interactionBox = self.frame.interaction_box # equivalent to a point cloud in 3-space
+													# Interaction box provides the 3D rectangle for the finger pos
 
-		Figure out how to save what was drawn on the screen when you
-		go back to hovering. Screenshot it then blit the background
-		again as that screenshot?
+		finger = self.frame.fingers.frontmost
 
-
-		Get circle scaling right in scale_cursor function
-		"""
-
-		if self.background == 0:
-			return
-
-		frame = controller.frame() # The frame of info from the leap
-		interactionBox = frame.interaction_box # The 3D box where we "draw"
-
-		finger = frame.fingers.frontmost
-		zone = finger.touch_zone
-		distance = finger.touch_distance
-		
+		distance = finger.touch_distance # Distance forwards (z direction) (for drawing zones)
 		stabilizedPosition = finger.stabilized_tip_position # Stabilized tip position for smoother movement at the cost of accuracy/speed
+		normalizedPosition = interactionBox.normalize_point(stabilizedPosition) # Normalize the x, y, z pos to the 3D rect
 
-		normalizedPosition = interactionBox.normalize_point(stabilizedPosition)
-		
-		x = normalizedPosition.x * WIDTH
-		y = HEIGHT * (1 - normalizedPosition.y)
+		if len(self.frame.fingers) > 0:
+			self.storage['nofingers'] = False
+		else:
+			self.storage['nofingers'] = True
 
-		finger_pos = (int(x),int(y))
+		self.storage['x'] = normalizedPosition.x
+		self.storage['y'] = normalizedPosition.y
+		self.storage['z'] = normalizedPosition.z
 
-		if distance <= -0.001:
-			
-			pygame.draw.circle(self.screen, self.color, finger_pos, self.radius) # defines the brush and size of the brush
-			self.draw_on = True
-			# self.cursor.image = self.cursor.change_fill()
+		self.storage['actualX'] = stabilizedPosition.x
+		self.storage['actualY'] = stabilizedPosition.y
+		self.storage['actualZ'] = stabilizedPosition.z
 
-		if distance <= 0.5 and distance > 0:
+		# self.rectSurf = pygame.Surface((int(self.cursor.width), int(self.cursor.height)), self.background)
+		# 3 Zones:
+		# 		1: Drawing
+		#		2: Hovering
+		#		3: Hovering and danger of being out of range
 
-			self.draw_on = False
-			# self.color = (random.randrange(256), random.randrange(256), random.randrange(256)) # generates random color
-			self.color = (255, 255, 0) # Sets color to yellow
+		if distance > -1 and distance <= 0:
+			self.storage['zone'] = 1
 
-			self.cursor.image = self.cursor.scale_cursor(distance)
+		if distance > 0 and distance <= 0.5:
+			self.storage['zone'] = 0
 
-			self.allSprites.clear(self.screen, self.background)
-			self.allSprites.update(finger_pos)
+		elif distance > .5 and distance <= 1:
+			self.storage['zone'] = -1
 
-
-
-		if self.draw_on: # if holding down mouse click
-			pygame.draw.circle(self.background, self.color, finger_pos, self.radius) #draw a circle at new mouse position
-			self.round_line(self.background, self.color, finger_pos, self.last_position, self.radius) # connects the 2 circles together to form a line
-
-		self.last_position = finger_pos # update the last position to the position you ended the line on
-	
-		if (not frame.gestures().is_empty) and (distance > 0 and (not self.draw_on)):
-			self.screen.fill((0,0,0))
-
-		pygame.display.flip() # Update full display Surface to the screen
+class ZDistanceLine():
+	def __init__(self, width, height, pos):
+		self.width = width
+		self.height = height
+		self.pos = pos
+		self.surface = pygame.Surface((self.width, self.height))
+		self.dotColor = (255, 255, 255) # White
+		self.dotSize = 15
 
 
-	"""
-	Function:
-	Allows for the connection of 2 circles to create a line.
+		self.dotXPos = int(self.width // 2) # X value minus half the width
+		self.dotYPos = int(self.height // 2)
 
-	Arguments:
-	srf = the pygame Surface
-	color = color in (int, int, int) form
-	start = starting position of mouse
-	end = ending position of mouse
-	radius = default is 1 if nothing passed in. Determines size of brush.
-	"""
-	def round_line(self, srf, color, start, end, radius=1):
+		print self.dotXPos, self.dotYPos, self.pos
 
-		dx = end[0] - start[0] # x distance
-		dy = end[1] - start[1] # y distance
-		distance = max(abs(dx), abs(dy)) # find how far the 2 circles are from each other
 
-		for i in range(distance): # iterate to connect circles
-			x = int(start[0] + float(i)/distance*dx)
-			y = int(start[1] + float(i)/distance*dy)
+	def updatedSurface(self, zValue):
+		# zValue ranges from 0 to 1
+		self.dotYPos = int(self.pos[1] + (self.height*zValue))
+		blitPos = (self.pos[0]-self.width, self.pos[1])
 
-			pygame.draw.circle(srf,color,(x,y),radius)
+		self.surface.fill(BLACK)
+		pygame.draw.circle(self.surface, (self.dotColor), (self.dotXPos, self.dotYPos), self.dotSize)
 
-def initailizePictureFolder():
-	if not os.path.isdir(SSHOT_FOLDER): # If the screenshot folder doesn't exist
+		return self.surface, blitPos
+
+
+
+
+def initGame():
+	if not os.path.isdir(SCREENSHOT_FOLDER): # If the screenshot folder doesn't exist
 		print "Creating folder" # Debug output
-		os.mkdir(SSHOT_FOLDER) # Make the folder
+		os.mkdir(SCREENSHOT_FOLDER) # Make the folder
+
+"""
+Function:
+Allows for the connection of 2 circles to create a line.
+
+Arguments:
+srf = the pygame Surface
+color = color in (int, int, int) form
+start = starting position of mouse
+end = ending position of mouse
+radius = default is 1 if nothing passed in. Determines size of brush.
+"""
+def round_line(self, srf, color, start, end, radius=1):
+
+	dx = end[0] - start[0] # x distance
+	dy = end[1] - start[1] # y distance
+	distance = max(abs(dx), abs(dy)) # find how far the 2 circles are from each other
+
+	for i in range(distance): # iterate to connect circles
+		x = int(start[0] + float(i)/distance*dx)
+		y = int(start[1] + float(i)/distance*dy)
+
+		pygame.draw.circle(srf,color,(x,y),radius)
 
 def analyzeImage(filepath):
 	tempFile = "out" # Name of output from tesseract
@@ -174,58 +145,101 @@ def analyzeImage(filepath):
 	os.remove(tempFile) # Delete the output file from tesseract
 	return contents
 
+def analyzeSurface(pygameSurface):
+	baseName = 'screenshotTest'
+	imageExt = '.png'
+	imageFilename = os.path.join(SCREENSHOT_FOLDER, baseName + imageExt)
+	pygame.image.save(pygameSurface, imageFilename)
+
+	result = analyzeImage(imageFilename)
+	cleanedResults = [x for x in result if x in string.ascii_letters]
+	result = ''.join(cleanedResults)
+
+	return cleanedResults
+
 def runPygame(leapController, leapListener):
 
 	# Initialize the pygame stuff
+
 	screen = pygame.display.set_mode(SIZE) # Make the pygame window
 	background = pygame.Surface(screen.get_size()) # Get the Surface for the background of the window with the size of the window
-	background.fill((0,0,0)) # Fill the background with black
-	screen.blit(background, (0,0)) # Put the background onto the screen
-	pygame.display.set_caption("LEAPS.edu") # Set the title of the pygame window
+	drawSurface = pygame.Surface(screen.get_size()) # Get the Surface for drawing
 	font = pygame.font.SysFont("Comic Sans MS", 200) # Create a font for displaying text in the window
+	pygame.display.set_caption("LEAPS.edu") # Set the title of the pygame window
 
-	cursor = Cursor() # Create a cursor sprite
-	allSprites = pygame.sprite.Group(cursor) # Create a sprite group out of the cursor
+	cursorSize = 10 # Size of cursor circle
+	cursorWidth = 50 # Width of surface that holds the cursor
+	cursorHeight = 50 # Height of surface that holds the cursor
+	cursorOffset = cursorWidth // 2 # Offset to shift the cursor surface to the correct location
+	cursorSurface = pygame.Surface((cursorWidth, cursorHeight)) # Surface to hold cursor circle
+	cursorSurface.set_colorkey(BLACK)
+	drawing = False # Current drawing state
+	drawColor = (0, 255, 255) # Color to draw with (Cyan)
 
-	# Adding pygame info to the leap listener
-	leapListener.background = background 
-	leapListener.cursor = cursor
-	leapListener.allSprites = allSprites
-	leapListener.screen = screen
+	pygame.draw.circle(cursorSurface, (255, 255, 0), (cursorOffset, cursorOffset), cursorSize)
+	background.fill(BLACK) # Fill the background with black
 
-	# Counter for screen shots, just so we're not overwriting the old one with the new
-	imageCounter = 1
+	zDist = ZDistanceLine(40, 80, (WIDTH, 0))
+
 	# Running the pygame loop
 	while True:
-		for event in pygame.event.get(): # Get all events and loop over
-			if event.type == pygame.QUIT: # If the window has been X'ed out
-				leapController.remove_listener(leapListener) # Remove the listener
-				pygame.quit() # Quit pygame
-				sys.exit() # Quit python
-			if event.type == pygame.KEYDOWN: # Keypressed
-				imageFilename = os.path.join(SSHOT_FOLDER, 'test' + str(imageCounter) + '.png') # Create screenshot filename
-				print "Image saved as", imageFilename # Debug output
-				pygame.image.save(leapListener.screen, imageFilename) # Save screenshot
-				imageCounter += 1 # Increment the screenshot number
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				leapController.remove_listener(leapListener)
+				pygame.quit()
+				sys.exit()
+			if event.type == pygame.KEYDOWN and event.key == 306: # 306 is left-ctrl
+				result = analyzeSurface(drawSurface)
+				print result
 
-				result = analyzeImage(imageFilename) # Call analyzer function, store result
-				cleanedResults = [x for x in result if x in string.ascii_letters] # Make a list, remove all non-ascii characters
-				result = ''.join(cleanedResults) # Store the cleaned stuff back into result
-				print "Results: ", result # Debug output
-				label = font.render(result, 1, (255, 255, 0)) # Makes yellow label
-				screen.fill((0,0,0)) # Fills screen with black
-				screen.blit(label, (100, 100)) # Copies the label text onto the screen Surface
+		if 'x' not in leapListener.storage.keys(): # If the leap has no info to use
+			print "\n\n\nPygame tried to run before Leap got a frame\n\n\n"
+			continue # Don't do the rest of the loop
 
+		cursorPos = ( int(leapListener.storage['x']*WIDTH), int((1 - leapListener.storage['y'])*HEIGHT) )
+		cursorOpacity = 255 * (1 - leapListener.storage['z'])
+
+
+		if leapListener.storage['zone'] == 1:
+			cursorColor = (0, 255, 255) # Cyan
+			if leapListener.storage['nofingers']:
+				drawing = False
+			else:
+				drawing = True
+
+		elif leapListener.storage['zone'] == 0:
+			cursorColor = (255, 255, 0) # Yellow
+			drawing = False
+
+		elif leapListener.storage['zone'] == -1:
+			cursorColor = (255, 0, 0) # Red
+			drawing = False
+
+		if drawing:
+			pygame.draw.circle(drawSurface, drawColor, cursorPos, cursorSize)
+
+		pygame.draw.circle(cursorSurface, cursorColor, (cursorOffset, cursorOffset), cursorSize)
+		cursorOffsetPos = (cursorPos[0]-cursorOffset, cursorPos[1]-cursorOffset) # Necessary because rects are 
+																				 # copied from the upper left corner
+
+		distLineSurface, distLinePos = zDist.updatedSurface(leapListener.storage['z'])
+
+		screen.blit(background, (0,0)) # Put the background onto the screen
+		screen.blit(drawSurface, (0,0)) # Put the drawing onto the screen
+		screen.blit(distLineSurface, distLinePos) # Put the drawing onto the screen
+		screen.blit(cursorSurface, (cursorOffsetPos)) # Put the cursor onto the screen
+
+		pygame.display.flip() # Update full display Surface to the screen
 
 
 def main():
 	# Initialize Leap stuff
 	controller = Leap.Controller()
-	listener = EduListener()
+	listener = LeapDataListener()
 	controller.add_listener(listener)
 
 	# Make a folder for screen shots if one doesn't exist
-	initailizePictureFolder()
+	initGame()
 
 	# Run the function for all pygame behavior
 	runPygame(controller, listener)
