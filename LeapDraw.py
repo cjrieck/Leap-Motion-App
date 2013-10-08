@@ -161,20 +161,21 @@ def analyzeSurface(pygameSurface):
 
 def get_eraser_information(screen, drawSurface, cursorSurface, previousEraserPos, cursorSize, fingerList):
 	
-	fingerOnePositionX = fingerList[0].stabilized_tip_position.x
-	fingerTwoPositionX = fingerList[1].stabilized_tip_position.x
+	# Get finger vectors for fingers 1 and 2
+	fingerOnePosition = fingerList[0].stabilized_tip_position
+	fingerTwoPosition = fingerList[1].stabilized_tip_position
 
-	fingerOnePositionY = fingerList[0].stabilized_tip_position.y
-	fingerTwoPositionY = fingerList[1].stabilized_tip_position.y
+	# Find the vector of the midpoint
+	fingersMidPointCoordinates = (fingerOnePosition + fingerTwoPosition) / 2
 
-	midPointX = int((fingerOnePositionX + fingerTwoPositionX) / 2)
-	midPointY = int((fingerOnePositionY + fingerTwoPositionY) / 2)
+	# Get the x, y coordinates for the midpoint
+	fingersMidPoint = (int(fingersMidPointCoordinates.x), int(fingersMidPointCoordinates.y))	
 
-	fingersMidPoint = (midPointX, midPointY)
-
+	# Make sure that the cursor stays within the dimensions of the screen (as noted in the Leap documentation)
 	eraserPos = (fingersMidPoint[0]*HEIGHT, WIDTH-fingersMidPoint[1]*WIDTH)
-	eraserColor = (255,255,255)
+	eraserColor = (255,255,255) # White
 
+	# Set previous eraser position to the new position
 	previousEraserPos = eraserPos
 
 	return previousEraserPos, cursorSurface, drawSurface, eraserColor
@@ -245,7 +246,7 @@ def runPygame(leapController, leapListener):
 			drawing = False
 
 		if drawing:
-			if len(leapListener.storage['fingers']) > 1:
+			if len(leapListener.storage['fingers']) == 2:
 				previousEraserPos, cursorSurface, drawSurface, cursorColor = get_eraser_information(screen, drawSurface, cursorSurface, previousEraserPos, cursorSize, leapListener.storage['fingers'])
 				
 				# need to change the (0,0,0) to the color of the background
