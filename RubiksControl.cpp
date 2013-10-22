@@ -4,7 +4,7 @@
 using namespace Leap;
 using namespace std;
 
-class RubiksListener : public Listener{
+class RubiksListener : public Listener {
 public:
 	virtual void onInit(const Controller&);
 	virtual void onConnect(const Controller&);
@@ -13,11 +13,11 @@ public:
     virtual void onFrame(const Controller&);
 };
 
-void RubiksListener::onInit(const Controller& controller){
+void RubiksListener::onInit(const Controller& controller) {
 	cout << "Initialized" << endl;
 }
 
-void RubiksListener::onConnect(const Controller& controller){
+void RubiksListener::onConnect(const Controller& controller) {
 	cout << "Connected" << endl;
 	/*
 	Insert gestures here
@@ -25,6 +25,6 @@ void RubiksListener::onConnect(const Controller& controller){
 	*/
 }
 
-void RubiksListener::onDisconnect(const Controller& controller){
+void RubiksListener::onDisconnect(const Controller& controller) {
 	cout << "Disonnected" << endl;
 }
