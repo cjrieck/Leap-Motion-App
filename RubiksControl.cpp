@@ -42,6 +42,10 @@ void RubiksDataStore::onDisconnect(const Controller& controller) {
 	cout << "Disonnected" << endl;
 }
 
+void RubiksDataStore::onExit(const Controller& controller){
+	cout << "Exited" << endl;
+}
+
 void RubiksDataStore::onFrame(const Controller& controller){
 
 	const Frame frame = controller.frame();
