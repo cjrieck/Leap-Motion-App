@@ -1,0 +1,23 @@
+﻿Build started 10/29/2013 11:04:13 PM.
+     1>Project "C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\LeapMotionApp.vcxproj" on node 2 (Build target(s)).
+     1>ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.0\bin\x86\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /I..\..\..\..\..\Desktop\cinder_0.8.5_vc2012\include /I..\include /nologo /fo"Debug\Resources.res" Resources.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\LeapMotionApp.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\..\leap\msw /LIBPATH:..\..\cinder\lib /LIBPATH:..\..\cinder\lib\msw cinder_d.lib Leap.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:LIBCMT /NODEFAULTLIB:LIBCPMT /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\LeapMotionApp.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\LeapMotionApp.lib" /MACHINE:X86 Debug\Resources.res
+         Debug\LeapMotionAppApp.obj
+     1>LeapMotionAppApp.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+     1>cinder_d.lib(zutil.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(zutil.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+     1>cinder_d.lib(trees.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(trees.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+     1>cinder_d.lib(inftrees.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(inftrees.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+     1>cinder_d.lib(inflate.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(inflate.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+     1>cinder_d.lib(inffast.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(inffast.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+     1>cinder_d.lib(deflate.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(deflate.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+     1>cinder_d.lib(crc32.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(crc32.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+     1>cinder_d.lib(compress.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(compress.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+     1>cinder_d.lib(adler32.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cinder_d.lib(adler32.obj)' or at 'C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\vc100.pdb'; linking object as if no debug info
+         LeapMotionApp.vcxproj -> C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\Debug\LeapMotionApp.exe
+     1>Done Building Project "C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\LeapMotionApp.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:05.69
