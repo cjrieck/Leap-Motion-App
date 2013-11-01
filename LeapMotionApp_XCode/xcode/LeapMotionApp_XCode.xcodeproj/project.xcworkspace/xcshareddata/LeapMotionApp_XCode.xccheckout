@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D5973746-4ADB-40CF-9CF0-954ED5EF5C75</string>
+	<key>IDESourceControlProjectName</key>
+	<string>LeapMotionApp_XCode</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2251E43C-13A7-407F-BEE5-E5A2E1BD5B00</key>
+		<string>https://github.com/cjrieck/Leap-Motion-App.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>LeapMotionApp_XCode/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2251E43C-13A7-407F-BEE5-E5A2E1BD5B00</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/cjrieck/Leap-Motion-App.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2251E43C-13A7-407F-BEE5-E5A2E1BD5B00</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2251E43C-13A7-407F-BEE5-E5A2E1BD5B00</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Leap-Motion-App</string>
+		</dict>
+	</array>
+</dict>
+</plist>
