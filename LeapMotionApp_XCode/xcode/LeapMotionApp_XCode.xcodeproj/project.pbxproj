@@ -15,10 +15,10 @@
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		D335E6D037CD49289F1BF45D /* LeapMotionApp_XCode_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 0B7511F7747142448BCF627A /* LeapMotionApp_XCode_Prefix.pch */; };
-		945C9DC51C3C43ADAC2B628F /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49519A91743C4A1DB015C9C7 /* CinderApp.icns */; };
-		738326C20E1048CE87B223C2 /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = 3936A944956948AFBF26C5B2 /* Resources.h */; };
-		86071434CA3345EDB8958373 /* LeapMotionApp_XCodeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12F284002F5A4BCA9A7F5FD4 /* LeapMotionApp_XCodeApp.cpp */; };
+		F207D57504934EFF927D5E86 /* LeapMotionApp_XCode_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AAA5BBF84560460C8E7DF6F3 /* LeapMotionApp_XCode_Prefix.pch */; };
+		C29D9B17729144299FBE7A25 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5B7077DE2D8E45B2A2F93E7D /* CinderApp.icns */; };
+		DF43AABA03BD4845931E995E /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = 707D92E645C3489FAB73C5A2 /* Resources.h */; };
+		7E6B194EE8DB49D9B84BE1B9 /* LeapMotionApp_XCodeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 212E8D118FD9412E9970AB63 /* LeapMotionApp_XCodeApp.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,11 +33,11 @@
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* LeapMotionApp_XCode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeapMotionApp_XCode.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		12F284002F5A4BCA9A7F5FD4 /* LeapMotionApp_XCodeApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../src/LeapMotionApp_XCodeApp.cpp; sourceTree = "<group>"; name = LeapMotionApp_XCodeApp.cpp; };
-		3936A944956948AFBF26C5B2 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../include/Resources.h; sourceTree = "<group>"; name = Resources.h; };
-		49519A91743C4A1DB015C9C7 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; name = CinderApp.icns; };
-		536F2C731A494632ADAF86F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; name = Info.plist; };
-		0B7511F7747142448BCF627A /* LeapMotionApp_XCode_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = LeapMotionApp_XCode_Prefix.pch; sourceTree = "<group>"; name = LeapMotionApp_XCode_Prefix.pch; };
+		212E8D118FD9412E9970AB63 /* LeapMotionApp_XCodeApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../src/LeapMotionApp_XCodeApp.cpp; sourceTree = "<group>"; name = LeapMotionApp_XCodeApp.cpp; };
+		707D92E645C3489FAB73C5A2 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../include/Resources.h; sourceTree = "<group>"; name = Resources.h; };
+		5B7077DE2D8E45B2A2F93E7D /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; name = CinderApp.icns; };
+		CCF073EE9B33416DA2D92FCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; name = Info.plist; };
+		AAA5BBF84560460C8E7DF6F3 /* LeapMotionApp_XCode_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = LeapMotionApp_XCode_Prefix.pch; sourceTree = "<group>"; name = LeapMotionApp_XCode_Prefix.pch; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +62,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				12F284002F5A4BCA9A7F5FD4 /* LeapMotionApp_XCodeApp.cpp */,
+				212E8D118FD9412E9970AB63 /* LeapMotionApp_XCodeApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -122,8 +122,8 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				3936A944956948AFBF26C5B2 /* Resources.h */,
-				0B7511F7747142448BCF627A /* LeapMotionApp_XCode_Prefix.pch */,
+				707D92E645C3489FAB73C5A2 /* Resources.h */,
+				AAA5BBF84560460C8E7DF6F3 /* LeapMotionApp_XCode_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -131,8 +131,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				49519A91743C4A1DB015C9C7 /* CinderApp.icns */,
-				536F2C731A494632ADAF86F7 /* Info.plist */,
+				5B7077DE2D8E45B2A2F93E7D /* CinderApp.icns */,
+				CCF073EE9B33416DA2D92FCA /* Info.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -196,7 +196,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				945C9DC51C3C43ADAC2B628F /* CinderApp.icns in Resources */,
+				C29D9B17729144299FBE7A25 /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,7 +207,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86071434CA3345EDB8958373 /* LeapMotionApp_XCodeApp.cpp in Sources */,
+				7E6B194EE8DB49D9B84BE1B9 /* LeapMotionApp_XCodeApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +269,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = i386;
-				CINDER_PATH = "../../../../../cinder";
+				CINDER_PATH = "../../../../cinder";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
@@ -286,7 +286,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = i386;
-				CINDER_PATH = "../../../../../cinder";
+				CINDER_PATH = "../../../../cinder";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";

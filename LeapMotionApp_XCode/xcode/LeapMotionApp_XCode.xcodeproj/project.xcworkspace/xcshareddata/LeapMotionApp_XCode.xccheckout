@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>D5973746-4ADB-40CF-9CF0-954ED5EF5C75</string>
+	<string>E3EA64CD-F7B9-4C92-9775-1DBC43A75AB0</string>
 	<key>IDESourceControlProjectName</key>
 	<string>LeapMotionApp_XCode</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,11 +14,11 @@
 		<string>https://github.com/cjrieck/Leap-Motion-App.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>LeapMotionApp_XCode/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode.xcodeproj/project.xcworkspace</string>
+	<string>LeapMotionApp_XCode/xcode/LeapMotionApp_XCode.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>2251E43C-13A7-407F-BEE5-E5A2E1BD5B00</key>
-		<string>../../../../..</string>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/cjrieck/Leap-Motion-App.git</string>
