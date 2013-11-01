@@ -6,6 +6,13 @@ Leap Into the Future of Education
  Teammates: Clayton, Robert, Aimee, Bryan
 
 *** Make sure to include appropriate files for your system in the app's directory ***
+Missing files to be added:
+-Create a cinder/ folder in the Leap-Motion-App repo
+-Copy into that folder from your cinder installation the folders:
+--boost
+--include
+--lib
+-It should work.
 
  GitHub Tutorial:
 
