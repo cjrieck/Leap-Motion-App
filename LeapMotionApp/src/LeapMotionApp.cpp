@@ -6,6 +6,7 @@
 
 #include "Leap.h"
 #include <iostream>
+#include <cmath>
 
 using namespace ci;
 using namespace ci::app;
@@ -15,7 +16,7 @@ using namespace std;
 
 // --------- CONSTANTS
 static const short sizeCube = 3;
-static const short cubeletWidth = 50;
+static const short cubeletWidth = 100;
 static const short cubeWidth = cubeletWidth*3;
 static const Vec3f cubeSize(cubeWidth, cubeWidth, cubeWidth);
 static const Vec3f cubeletSize(cubeletWidth, cubeletWidth, cubeletWidth);
@@ -29,9 +30,12 @@ public:
 	Cubelet() {};
 	Cubelet(const Vec3f& cntr, const Vec3f& sze) : center(cntr), size(sze) {};
 
+	Vec3f getCenter() { return this->center; };
+
 	void operator()(const Vec3f&, const Vec3f&);
 
 	void draw();
+	void rotate(const Vec3f&, const float&);
 };
 
 void Cubelet::operator()(const Vec3f& cntr, const Vec3f& diagonalSize) {
@@ -43,11 +47,16 @@ void Cubelet::draw() {
 	gl::drawStrokedCube(this->center, this->size);
 }
 
+void Cubelet::rotate(const Vec3f& axis, const float& angle) {
+	//this->center.rotate(axis, angle);
+	this->center = this->center * Quatf(axis, angle);
+}
+
 class Cube {
-	short nSides;
+	short nSides, nCubelets;
 	Vec3f center, size;
 	Cubelet main;
-	Cubelet*** cubeletArray;
+	Cubelet* cubeletArray;
 public:
 	Cube() {};
 
@@ -62,15 +71,18 @@ void Cube::operator()(const Vec3f& cntr, const Vec3f& totalSize, const short& si
 	this->size = totalSize;
 	this->nSides = sides;
 
-	cubeletArray = new Cubelet**[nSides];
+	//cubeletArray = new Cubelet**[nSides];
+	this->nCubelets = pow(this->nSides, 3);
+	cubeletArray = new Cubelet[this->nCubelets];
 	short negativeOffset = -(nSides/2);
 
+	short numCubelets = 0;
 	for (short i = 0; i < nSides; i++) { // -1, 0, 1 for xOffset scale
-		cubeletArray[i] = new Cubelet*[nSides];
+		//cubeletArray[i] = new Cubelet*[nSides];
 		short iOff = i + negativeOffset;
 
 		for (short j = 0; j < nSides; j++) { // -1, 0, 1 for yOffset scale
-			cubeletArray[i][j] = new Cubelet[nSides];
+			//cubeletArray[i][j] = new Cubelet[nSides];
 			short jOff = j + negativeOffset;
 
 			for (short k = 0; k < nSides; k++) { // -1, 0, 1 for zOffset scale
@@ -80,26 +92,63 @@ void Cube::operator()(const Vec3f& cntr, const Vec3f& totalSize, const short& si
 				cubeletPos += (jOff * yOffset);
 				cubeletPos += (kOff * zOffset);
 
-				cubeletArray[i][j][k] = Cubelet(cubeletPos, cubeletSize);
+				cubeletArray[numCubelets] = Cubelet(cubeletPos, cubeletSize);
+				numCubelets++;
 			}
 		}
 	}
-
-	this->main(this->center, this->size);
 }
 
 void Cube::draw() const {
-	for (short i = 0; i < this->nSides; i++) { // -1, 0, 1 for xOffset scale
-		for (short j = 0; j < this->nSides; j++) { // -1, 0, 1 for yOffset scale
-			for (short k = 0; k < this->nSides; k++) { // -1, 0, 1 for zOffset scale
-				this->cubeletArray[i][j][k].draw();
-			}
-		}
+	//for (short i = 0; i < this->nSides; i++) { // -1, 0, 1 for xOffset scale
+	//	for (short j = 0; j < this->nSides; j++) { // -1, 0, 1 for yOffset scale
+	//		for (short k = 0; k < this->nSides; k++) { // -1, 0, 1 for zOffset scale
+	//			this->cubeletArray[i][j][k].draw();
+	//		}
+	//	}
+	//}
+	for (short i = 0; i < this->nCubelets; i++) {
+		this->cubeletArray[i].draw();
 	}
 }
 
-void Cube::rotateSlices(const short&, const Vec3f&, const float&) {
-	
+void Cube::rotateSlices(const short& nSlicesTurning, const Vec3f& rotationAxis, const float& rotationDirection) {
+	short nCubeletsTurning = pow(this->nSides, 2) * nSlicesTurning;
+	short* indiciesToTurn = new short[nCubeletsTurning];
+
+	short index = 0;
+	if (nSlicesTurning == 1) {
+		if (rotationAxis == Vec3f::xAxis()) {
+			for (short i = 0; i < this->nCubelets; i++) {
+				if (this->cubeletArray[i].getCenter().x == xOffset.x ) {
+					indiciesToTurn[index++] = i;
+				}
+			}
+		}
+		else if (rotationAxis == Vec3f::yAxis()) {
+			for (short i = 0; i < this->nCubelets; i++) {
+				if (this->cubeletArray[i].getCenter().y == yOffset.y ) {
+					indiciesToTurn[index++] = i;
+				}
+			}
+		}
+		else if (rotationAxis == Vec3f::zAxis()) {
+			for (short i = 0; i < this->nCubelets; i++) {
+				if (this->cubeletArray[i].getCenter().z == zOffset.z ) {
+					indiciesToTurn[index++] = i;
+				}
+			}
+		}
+	}
+
+	for (short i = 0; i < nCubeletsTurning; i++) {
+		console() << this->cubeletArray[indiciesToTurn[i]].getCenter() << endl;
+		this->cubeletArray[indiciesToTurn[i]].rotate(rotationAxis, rotationDirection);
+	//	Cubelet& cubeletTurning = this->cubeletArray[indiciesToTurn[i]];
+	//	cubeletTurning.rotate(rotationAxis, rotationDirection);
+	}
+	console() << endl << endl << endl;
+	//this->cubeletArray[26].rotate(rotationAxis, rotationDirection);
 }
 
 class LeapMotionListener : public Listener {
@@ -144,15 +193,11 @@ void LeapMotionListener::onFrame(const Controller& controller) {
 	Finger finger = frame.fingers().frontmost();
 	Vector stabilizedPoint = finger.stabilizedTipPosition();
 
-	console() << stabilizedPoint << endl;
-
 	Vector normalizedPoint = intBox.normalizePoint(stabilizedPoint) * 2;
 
 	this->pointsList[0] = normalizedPoint.x - 1;
 	this->pointsList[1] = normalizedPoint.y - 1;
 	this->pointsList[2] = normalizedPoint.z - 1;
-
-	console() << normalizedPoint << endl;
 }
 
 void LeapMotionListener::onFocusGained(const Controller& controller) {
@@ -203,8 +248,10 @@ void LeapMotionApp::keyDown( KeyEvent event ) {
 }
 
 void LeapMotionApp::update() {
-	gl::translate( Vec3f(getWindowWidth()/2, getWindowHeight()/2, 0) );
-	//this->rCube.rotateSlice(nSlices, axis, );
+	gl::translate( Vec3f(getWindowWidth()/2, getWindowHeight()/2, 0) ); // Shift over for coordinate axis rotations
+	this->rCube.rotateSlices(1, Vec3f::zAxis(), .05);
+	//this->rCube.rotateSlice(nSlices, axis, direction);
+	gl::rotate( Vec3f::yAxis() );
 	//gl::rotate( Vec3f::yAxis() * this->leapListener.pointsList[0] );
 	//gl::rotate( Vec3f::xAxis() * this->leapListener.pointsList[1] );
 	//gl::rotate( Vec3f::zAxis() * this->leapListener.pointsList[2] );
