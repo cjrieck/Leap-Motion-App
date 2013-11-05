@@ -1,4 +1,9 @@
 #include "../include/Resources.h"
 
 1	ICON	"..\\resources\\cinder_app_icon.ico"
+	WHITE_FACE
 	BLUE_FACE
+	RED_FACE
+	GREEN_FACE
+	ORANGE_FACE
+	YELLOW_FACE
