@@ -1,0 +1,154 @@
+body{
+	margin:0;
+	padding:0;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grands", sans-serif;
+	font-weight: 300;
+}
+
+section{
+  text-align: center;
+}
+
+#home { 
+	background: url(../images/leap2.png) 50% 0 no-repeat fixed; 
+  background-size: cover;
+  height: 900px; /* messing with the heights so that it looks good on any size screen */
+	margin: 0 auto; 
+  width: 100%; 
+  /*max-width: 100%; */
+  position: relative; 
+  box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+.info {
+	margin: 0.2em 0;
+}
+
+#about { 
+	background: url(../images/leap3.jpg) 50% 0 no-repeat fixed; 
+  background-size: cover;
+	padding-top: 150px;
+  height: 900px; /* messing with the heights so that it looks good on any size screen */
+	margin: 0 auto; 
+  width: 100%; 
+  /*max-width: 100%; */
+  position: relative; 
+  box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+.about-content {
+	background-color: rgba(0,0,0,0.7);
+	padding: 1em 0 3em;
+}
+.about-content .description {
+	line-height: 1.4;
+}
+#team {
+  /*background: url(../images/brushed_metal.jpg) 50% 0 no-repeat fixed; */
+  padding-top: 150px;
+  height: 900px; /* messing with the heights so that it looks good on any size screen */
+  margin: 0 auto; 
+  width: 100%; 
+  /*max-width: 100%; */
+  position: relative; 
+  box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+/* Introduction */
+
+article{
+	position: absolute;
+  width: 100px;
+  text-align: center;
+  margin-left: -50px; /* margin is -0.5 * dimension */
+  margin-top: -25px;
+  left: 40%;
+  height: 458px;
+  text-indent: -76%;
+  top: 291px;
+  width: 100%;
+  
+
+}
+
+.info{
+	font-size: 500%;
+	text-align: center;
+  
+}
+
+#developers{
+  margin: 0px 0px;
+}
+
+#app_title{
+  color: white;
+  text-shadow:
+    -0.5px -0.5px 0 #000,
+    -0.5px -0.5px 0 #000,
+    -0.5px 1px 0 #000,
+    1px 1px 0 #000; 
+}
+
+.description{
+  /*padding-top: 20px;*/
+  text-align: center;
+  text-indent: 0%;
+  font-size: 150%;    
+  width: 70%;
+  height: 100%;
+  overflow: visible;
+  color: white;
+  text-shadow:
+    -0.5px -0.5px 0 #000,
+    -0.5px -0.5px 0 #000,
+    -0.5px 1px 0 #000,
+    1px 1px 0 #000; 
+}
+
+.team_description{
+  padding-top: -500px;
+  text-align: center;
+  text-indent: 0%;
+  font-size: 100%;    
+  width: 70%;
+  height: 100%;
+  overflow: visible;
+}
+
+div{
+  margin: auto;
+  display: inline-block;
+  padding: 0;
+}
+
+.personalinfodiv {
+  min-height: 100px;
+  padding: 20px 0px;
+  /*background: #EEEEEE;*/
+  border-bottom: 1px solid #BBBBBB;
+  margin: 5px 0px;
+  text-align: left;
+  
+}
+
+.personalinfodiv.odd {
+  text-align: left;
+
+}
+
+.personalinfodiv img {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  box-shadow: 3px 3px 15px -2px gray;
+  float: left;
+  margin: 0px 20px;
+}
+.personalinfodiv.odd img {
+  float: right;
+}
+
+a {
+  color: white;
+  /*text-decoration: none;*/
+  display: block;
+}
+
