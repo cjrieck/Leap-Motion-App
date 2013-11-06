@@ -1,4 +1,4 @@
-﻿Build started 11/5/2013 12:12:10 PM.
+﻿Build started 11/6/2013 12:21:42 AM.
      1>Project "C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\LeapMotionApp.vcxproj" on node 2 (Build target(s)).
      1>PreBuildEvent:
          xcopy "..\..\leap\msw\Leap.dll" "C:\Users\bryan\Documents\GitHub\Leap-Motion-App\LeapMotionApp\vc11\bin\" /Y /C
@@ -19,4 +19,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:11.53
+Time Elapsed 00:00:09.91

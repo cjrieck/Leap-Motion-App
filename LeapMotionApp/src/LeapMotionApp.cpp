@@ -23,8 +23,10 @@ static const short sizeCube = 3;
 static const short cubeletWidth = 100;
 static const short cubeWidth = cubeletWidth*3;
 
-static const float pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342;
-static const float rotationSpeed = 2 * pi / 60.0f;
+static const float pi = 3.141592653589793238462643383279;
+static const short nFramesPerRotation = 20;
+static const float intendedRotation = pi / 2;
+static const float rotationSpeed = intendedRotation / (float)nFramesPerRotation;
 
 static const Vec3f cubeSize(cubeWidth, cubeWidth, cubeWidth);
 static const Vec3f cubeletSize(cubeletWidth, cubeletWidth, cubeletWidth);
@@ -32,6 +34,33 @@ static const Vec3f xOffset(cubeletWidth, 0.0f, 0.0f);
 static const Vec3f yOffset(0.0f, cubeletWidth, 0.0f);
 static const Vec3f zOffset(0.0f, 0.0f, cubeletWidth);
 static const Vec3f rotatedCloseEnough(3.0f, 3.0f, 3.0f);
+
+float roundf(const float& num) {
+	float result;
+	float floored = floorf(num);
+	float remainder = num - floored;
+
+	if (num == 0) {
+		result = 0.0f;
+	}
+	else if (num > 0) {
+		if (remainder >= 0.5f) {
+			result = floored + 1.0f;
+		}
+		else {
+			result = floored;
+		}
+	}
+	else if (num < 0) {
+		if (remainder >= 0.5f) {
+			result = floored + 1.0f;
+		}
+		else {
+			result = floored;
+		}
+	}
+	return result;
+}
 
 class CubeletFace {
 private:
@@ -46,6 +75,7 @@ public:
 
 	void draw();
 	void rotate(const Vec3f&, const float&);
+	void snapCorners();
 };
 
 CubeletFace::CubeletFace(const Vec3f* faceCorners, gl::TextureRef faceTexture) {
@@ -92,12 +122,27 @@ void CubeletFace::draw() {
 void CubeletFace::rotate(const Vec3f& axis, const float& angle) {
 	gl::VboMesh::VertexIter iter = this->mesh.mapVertexBuffer(); // Update the VBO with the vertex iter
 
-	for (short i = 0; i < 4; i++) {
+	for (short i = 0; i < this->nCorners; i++) {
 		Vec3f oldPos = this->oldPositions[i];
 		Vec3f newPos = oldPos * Quatf(axis, angle); // Rotate using Quaternion multiplication
 
 		this->oldPositions[i] = newPos;
 		iter.setPosition( newPos ); // Update corner positions
+		++iter;
+	}
+}
+
+void CubeletFace::snapCorners() {
+	gl::VboMesh::VertexIter iter = this->mesh.mapVertexBuffer();
+
+	for (short i = 0; i < this->nCorners; i++) {
+		console() << "Before: " << this->oldPositions[i] << endl;
+		this->oldPositions[i].x = roundf(this->oldPositions[i].x);
+		this->oldPositions[i].y = roundf(this->oldPositions[i].y);
+		this->oldPositions[i].z = roundf(this->oldPositions[i].z);
+		console() << "After: " << this->oldPositions[i] << endl << endl;
+
+		iter.setPosition(this->oldPositions[i]);
 		++iter;
 	}
 }
@@ -119,6 +164,7 @@ public:
 
 	void draw();
 	void rotate(const Vec3f&, const float&);
+	void snapPosition();
 };
 
 Cubelet::Cubelet(const Vec3f& cntr, const Vec3f& diagonalSize) {
@@ -214,6 +260,16 @@ void Cubelet::rotate(const Vec3f& axis, const float& angle) {
 	}
 }
 
+void Cubelet::snapPosition() {
+	this->center.x = roundf(this->center.x);
+	this->center.y = roundf(this->center.y);
+	this->center.z = roundf(this->center.z);
+
+	for (short i = 0; i < this->nFaces; i++) {
+		this->faceArray[i].snapCorners();
+	}
+}
+
 class Cube {
 private:
 	bool midMovement;
@@ -235,6 +291,7 @@ public:
 	void update();
 	void draw() const;
 	void rotateSlices(const short&, const Vec3f&, const short&);
+	void endMovement();
 };
 
 void Cube::operator()(const Vec3f& cntr, const Vec3f& totalSize, const short& sides) {
@@ -282,17 +339,14 @@ void Cube::draw() const {
 void Cube::update() {
 	if (!this->midMovement) return;
 
-	if (this->nMovementsMade > 60) {
-		this->nMovementsMade = 0;
-		this->midMovement = false;
-		return; 
+	if (this->nMovementsMade >= nFramesPerRotation) {
+		this->endMovement();
 	}
 	else {
+		for (short i = 0; i < this->nCubeletsMoving; i++) {
+			this->cubeletArray[this->turningIndices[i]].rotate(this->motionAxis, this->motionDirection*rotationSpeed);
+		}
 		this->nMovementsMade++;
-	}
-
-	for (short i = 0; i < this->nCubeletsMoving; i++) {
-		this->cubeletArray[this->turningIndices[i]].rotate(this->motionAxis, this->motionDirection*rotationSpeed);
 	}
 }
 
@@ -308,23 +362,44 @@ void Cube::rotateSlices(const short& nSlicesTurning, const Vec3f& rotationAxis, 
 	short* indiciesToTurn = new short[nCubeletsTurning];
 
 	short index = 0;
-	if (this->motionAxis == Vec3f::xAxis()) {
+	if (this->motionAxis == Vec3f::xAxis()) { // Turning around xAxis in positive
 		for (short i = 0; i < this->nCubelets; i++) {
 			if (this->cubeletArray[i].getCenter().x == cubeletWidth ) {
 				indiciesToTurn[index++] = i;
 			}
 		}
 	}
-	else if (this->motionAxis == Vec3f::yAxis()) {
+	else if (this->motionAxis == Vec3f::yAxis()) { // Turning around yAxis in positive
 		for (short i = 0; i < this->nCubelets; i++) {
 			if (this->cubeletArray[i].getCenter().y == cubeletWidth ) {
 				indiciesToTurn[index++] = i;
 			}
 		}
 	}
-	else if (this->motionAxis == Vec3f::zAxis()) {
+	else if (this->motionAxis == Vec3f::zAxis()) { // Turning around zAxis in positive
 		for (short i = 0; i < this->nCubelets; i++) {
 			if (this->cubeletArray[i].getCenter().z == cubeletWidth ) {
+				indiciesToTurn[index++] = i;
+			}
+		}
+	}
+	else if (this->motionAxis == Vec3f::xAxis()*-1) { // Turning around xAxis in negative
+		for (short i = 0; i < this->nCubelets; i++) {
+			if (this->cubeletArray[i].getCenter().x*-1 == cubeletWidth ) {
+				indiciesToTurn[index++] = i;
+			}
+		}
+	}
+	else if (this->motionAxis == Vec3f::yAxis()*-1) { // Turning around yAxis in negative
+		for (short i = 0; i < this->nCubelets; i++) {
+			if (this->cubeletArray[i].getCenter().y*-1 == cubeletWidth ) {
+				indiciesToTurn[index++] = i;
+			}
+		}
+	}
+	else if (this->motionAxis == Vec3f::zAxis()*-1) { // Turning around zAxis in negative
+		for (short i = 0; i < this->nCubelets; i++) {
+			if (this->cubeletArray[i].getCenter().z*-1 == cubeletWidth ) {
 				indiciesToTurn[index++] = i;
 			}
 		}
@@ -332,6 +407,15 @@ void Cube::rotateSlices(const short& nSlicesTurning, const Vec3f& rotationAxis, 
 
 	this->nCubeletsMoving = index;
 	this->turningIndices = indiciesToTurn;
+}
+
+void Cube::endMovement() {
+	this->nMovementsMade = 0;
+	this->midMovement = false;
+
+	for (short i = 0; i < this->nCubelets; i++) {
+		this->cubeletArray[i].snapPosition();
+	}
 }
 
 class LeapMotionListener : public Listener {
@@ -428,7 +512,6 @@ void LeapMotionApp::setup() {
 	Vec3f cubeStartPos = Vec3f::zero(); // Cube starts at 0
 
 	// Setup calls
-
 	this->leapController.addListener(leapListener);
 
 	this->rCube(cubeStartPos, cubeSize, sizeCube);
@@ -438,40 +521,8 @@ void LeapMotionApp::setup() {
 	camera.setCenterOfInterestPoint( cubeStartPos );
 	camera.setPerspective( 60.0f, getWindowAspectRatio(), 1.0f, 2000.0f );
 	mMayaCam.setCurrentCam( camera );
-	//mVboMesh->bufferTexCoords2d( 0, texCoords );
 
-	//// setup the parameters of the Vbo
-	//int totalVertices = VERTICES_X * VERTICES_Z;
-	//int totalQuads = ( VERTICES_X - 1 ) * ( VERTICES_Z - 1 );
-	//gl::VboMesh::Layout layout;
-	//layout.setStaticIndices();
-	//layout.setDynamicPositions();
-	//layout.setStaticTexCoords2d();
-	//mVboMesh = gl::VboMesh::create( totalVertices, totalQuads * 4, layout, GL_QUADS );
-	//
-	//// buffer our static data - the texcoords and the indices
-	//vector<uint32_t> indices;
-	//vector<Vec2f> texCoords;
-	//for( int x = 0; x < VERTICES_X; ++x ) {
-	//	for( int z = 0; z < VERTICES_Z; ++z ) {
-	//		// create a quad for each vertex, except for along the bottom and right edges
-	//		if( ( x + 1 < VERTICES_X ) && ( z + 1 < VERTICES_Z ) ) {
-	//			indices.push_back( (x+0) * VERTICES_Z + (z+0) );
-	//			indices.push_back( (x+1) * VERTICES_Z + (z+0) );
-	//			indices.push_back( (x+1) * VERTICES_Z + (z+1) );
-	//			indices.push_back( (x+0) * VERTICES_Z + (z+1) );
-	//		}
-	//		// the texture coordinates are mapped to [0,1.0)
-	//		texCoords.push_back( Vec2f( x / (float)VERTICES_X, z / (float)VERTICES_Z ) );
-	//	}
-	//}
-	//
-	//mVboMesh->bufferIndices( indices );
-	//mVboMesh->bufferTexCoords2d( 0, texCoords );
-	//
-	//// make a second Vbo that uses the statics from the first
-	//mVboMesh2 = gl::VboMesh::create( totalVertices, totalQuads * 4, mVboMesh->getLayout(), GL_QUADS, &mVboMesh->getIndexVbo(), &mVboMesh->getStaticVbo(), NULL );
-	//mVboMesh2->setTexCoordOffset( 0, mVboMesh->getTexCoordOffset( 0 ) );
+	float test = 4.49f;
 }
 
 void LeapMotionApp::prepareSettings(Settings* settings) {
@@ -496,14 +547,42 @@ void LeapMotionApp::keyDown( KeyEvent event ) {
 	if (event.getCode() == KeyEvent::KEY_ESCAPE) {
 		quit();
 	}
-	if (event.getCode() == KeyEvent::KEY_a) {
+
+	if (event.getCode() == KeyEvent::KEY_u && event.isShiftDown()) { // Up face turn
 		this->rCube.rotateSlices(1, Vec3f::yAxis(), 1);
 	}
-	if (event.getCode() == KeyEvent::KEY_s) {
+	else if (event.getCode() == KeyEvent::KEY_u) {
 		this->rCube.rotateSlices(1, Vec3f::yAxis(), -1);
 	}
-	if (event.getCode() == KeyEvent::KEY_d) {
+	else if (event.getCode() == KeyEvent::KEY_f && event.isShiftDown()) { // Front face turn
 		this->rCube.rotateSlices(1, Vec3f::xAxis(), 1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_f) {
+		this->rCube.rotateSlices(1, Vec3f::xAxis(), -1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_l && event.isShiftDown()) { // Left face turn
+		this->rCube.rotateSlices(1, Vec3f::zAxis(), 1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_l) {
+		this->rCube.rotateSlices(1, Vec3f::zAxis(), -1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_r && event.isShiftDown()) { // Right face turn
+		this->rCube.rotateSlices(1, Vec3f::zAxis()*-1, 1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_r) {
+		this->rCube.rotateSlices(1, Vec3f::zAxis()*-1, -1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_b && event.isShiftDown()) { // Back face turn
+		this->rCube.rotateSlices(1, Vec3f::xAxis()*-1, 1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_b) {
+		this->rCube.rotateSlices(1, Vec3f::xAxis()*-1, -1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_d && event.isShiftDown()) { // Down face turn
+		this->rCube.rotateSlices(1, Vec3f::yAxis()*-1, 1);
+	}
+	else if (event.getCode() == KeyEvent::KEY_d) {
+		this->rCube.rotateSlices(1, Vec3f::yAxis()*-1, -1);
 	}
 }
 
