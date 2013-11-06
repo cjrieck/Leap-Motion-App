@@ -4,7 +4,7 @@
 #include "cinder/gl/Texture.h"
 #include "Resources.h"
 
-#include "../leap/Leap.h"
+#include "../../leap/Leap.h"
 #include <iostream>
 #include <cmath>
 
@@ -227,7 +227,7 @@ public:
 };
 
 void LeapMotionApp::setup() {
-	blueFace = gl::Texture( loadImage( loadResource(BLUE_FACE) ) );
+	blueFace = gl::Texture( loadImage( loadResource("BlueFace.PNG") ) );
 	this->leapController.addListener(leapListener);
 	this->rCube(Vec3f::zero(), cubeSize, sizeCube);
 }
