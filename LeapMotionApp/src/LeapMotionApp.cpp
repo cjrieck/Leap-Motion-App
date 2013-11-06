@@ -23,7 +23,8 @@ static const short sizeCube = 3;
 static const short cubeletWidth = 100;
 static const short cubeWidth = cubeletWidth*3;
 
-static const float rotationSpeed = .05f;
+static const float pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342;
+static const float rotationSpeed = 2 * pi / 60.0f;
 
 static const Vec3f cubeSize(cubeWidth, cubeWidth, cubeWidth);
 static const Vec3f cubeletSize(cubeletWidth, cubeletWidth, cubeletWidth);
@@ -86,7 +87,6 @@ CubeletFace::CubeletFace(const Vec3f* faceCorners, gl::TextureRef faceTexture) {
 void CubeletFace::draw() {
 	this->texture->enableAndBind();
 	gl::draw(this->mesh);
-	//this->texture->disable();
 }
 
 void CubeletFace::rotate(const Vec3f& axis, const float& angle) {
@@ -107,6 +107,7 @@ private:
 	gl::TextureRef whiteFace, blueFace, redFace, greenFace, orangeFace, yellowFace;
 	Vec3f center, size;
 	CubeletFace* faceArray;
+	gl::TextureRef* faceTexArray;
 	static const short nFaces = 6;
 public:
 	Cubelet() {};
@@ -121,12 +122,20 @@ public:
 };
 
 Cubelet::Cubelet(const Vec3f& cntr, const Vec3f& diagonalSize) {
-	this->whiteFace = gl::Texture::create( loadImage( loadResource(BLUE_FACE) ) );
+	this->whiteFace = gl::Texture::create( loadImage( loadResource(WHITE_FACE) ) );
+	this->orangeFace = gl::Texture::create( loadImage( loadResource(ORANGE_FACE) ) );
+	this->greenFace = gl::Texture::create( loadImage( loadResource(GREEN_FACE) ) );
+	this->redFace = gl::Texture::create( loadImage( loadResource(RED_FACE) ) );
 	this->blueFace = gl::Texture::create( loadImage( loadResource(BLUE_FACE) ) );
-	this->redFace = gl::Texture::create( loadImage( loadResource(BLUE_FACE) ) );
-	this->greenFace = gl::Texture::create( loadImage( loadResource(BLUE_FACE) ) );
-	this->orangeFace = gl::Texture::create( loadImage( loadResource(BLUE_FACE) ) );
-	this->yellowFace = gl::Texture::create( loadImage( loadResource(BLUE_FACE) ) );
+	this->yellowFace = gl::Texture::create( loadImage( loadResource(YELLOW_FACE) ) );
+
+	this->faceTexArray = new gl::TextureRef[6];
+	faceTexArray[0] = this->redFace; // Ordered so the final showing is correct (according to Zevi)
+	faceTexArray[1] = this->whiteFace;
+	faceTexArray[2] = this->blueFace;
+	faceTexArray[3] = this->greenFace;
+	faceTexArray[4] = this->yellowFace;
+	faceTexArray[5] = this->orangeFace;
 
 
 	this->center = cntr;
@@ -186,13 +195,13 @@ Cubelet::Cubelet(const Vec3f& cntr, const Vec3f& diagonalSize) {
 	this->faceArray = new CubeletFace[this->nFaces];
 
 	for (short i = 0; i < this->nFaces; i++) {
-		this->faceArray[i] = CubeletFace(tempVecArray[i], this->blueFace);
+		this->faceArray[i] = CubeletFace(tempVecArray[i], this->faceTexArray[i]);
 	}
 }
 
 void Cubelet::draw() {
 	//gl::drawStrokedCube(this->center, this->size);
-	gl::drawVector(Vec3f::zero(), this->center);
+	//gl::drawVector(Vec3f::zero(), this->center);
 	for (short i = 0; i < this->nFaces; i++) {
 		this->faceArray[i].draw();
 	}
@@ -212,6 +221,8 @@ private:
 	short motionDirection;
 	short nSlicesMoving;
 	short nMovementsMade;
+	short nCubeletsMoving;
+	short* turningIndices;
 
 	short nSides, nCubelets;
 	Vec3f center, size;
@@ -231,28 +242,35 @@ void Cube::operator()(const Vec3f& cntr, const Vec3f& totalSize, const short& si
 	this->size = totalSize;
 	this->nSides = sides;
 
-	this->nCubelets = (short)pow(this->nSides, 3);
-	cubeletArray = new Cubelet[this->nCubelets];
+	short maxNumCubelets = (short)pow(this->nSides, 3);
+	this->turningIndices = new short[maxNumCubelets];
+
+	cubeletArray = new Cubelet[maxNumCubelets];
 	short offset = (nSides/2); // Offset so the range is half negative, half positive (i.e. [-1, 1] or [-8, 8])
 
 	short numCubelets = 0;
-	for (short i = 0; i < nSides; i++) {
+	for (short i = 0; i < this->nSides; i++) {
 		short iOff = i - offset;
 
-		for (short j = 0; j < nSides; j++) {
+		for (short j = 0; j < this->nSides; j++) {
 			short jOff = j - offset;
 
-			for (short k = 0; k < nSides; k++) {
+			for (short k = 0; k < this->nSides; k++) {
 				short kOff = k - offset;
-				Vec3f cubeletPos = Vec3f::zero();
-				cubeletPos += (iOff * xOffset); // Offsets the cubelet by the xOffset constant vector, in a direction determined by i
-				cubeletPos += (jOff * yOffset);
-				cubeletPos += (kOff * zOffset);
 
-				cubeletArray[numCubelets++] = Cubelet(cubeletPos, cubeletSize);
+				if (i == 0 || i == this->nSides-1 || j == 0 || j == this->nSides-1 || k == 0 || k == this->nSides-1) {
+					Vec3f cubeletPos = Vec3f::zero();
+					cubeletPos += (iOff * xOffset); // Offsets the cubelet by the xOffset constant vector, in a direction determined by i
+					cubeletPos += (jOff * yOffset);
+					cubeletPos += (kOff * zOffset);
+
+					cubeletArray[numCubelets++] = Cubelet(cubeletPos, cubeletSize);
+				}
 			}
 		}
 	}
+
+	this->nCubelets = numCubelets;
 }
 
 void Cube::draw() const {
@@ -264,7 +282,7 @@ void Cube::draw() const {
 void Cube::update() {
 	if (!this->midMovement) return;
 
-	if (this->nMovementsMade > 100) {
+	if (this->nMovementsMade > 60) {
 		this->nMovementsMade = 0;
 		this->midMovement = false;
 		return; 
@@ -272,6 +290,19 @@ void Cube::update() {
 	else {
 		this->nMovementsMade++;
 	}
+
+	for (short i = 0; i < this->nCubeletsMoving; i++) {
+		this->cubeletArray[this->turningIndices[i]].rotate(this->motionAxis, this->motionDirection*rotationSpeed);
+	}
+}
+
+void Cube::rotateSlices(const short& nSlicesTurning, const Vec3f& rotationAxis, const short& rotationDirection) {
+	if (this->midMovement) return;
+	else this->midMovement = true;
+
+	this->nSlicesMoving = nSlicesTurning;
+	this->motionAxis = rotationAxis;
+	this->motionDirection = rotationDirection;
 
 	short nCubeletsTurning = (short)pow(this->nSides, 2) * this->nSlicesMoving;
 	short* indiciesToTurn = new short[nCubeletsTurning];
@@ -299,18 +330,8 @@ void Cube::update() {
 		}
 	}
 
-	for (short i = 0; i < nCubeletsTurning; i++) {
-		this->cubeletArray[indiciesToTurn[i]].rotate(this->motionAxis, this->motionDirection*rotationSpeed);
-	}
-}
-
-void Cube::rotateSlices(const short& nSlicesTurning, const Vec3f& rotationAxis, const short& rotationDirection) {
-	if (this->midMovement) return;
-	else this->midMovement = true;
-
-	this->nSlicesMoving = nSlicesTurning;
-	this->motionAxis = rotationAxis;
-	this->motionDirection = rotationDirection;
+	this->nCubeletsMoving = index;
+	this->turningIndices = indiciesToTurn;
 }
 
 class LeapMotionListener : public Listener {
