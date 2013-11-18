@@ -23,7 +23,7 @@ static const short sizeCube = 3;
 static const short cubeletWidth = 100;
 static const short cubeWidth = cubeletWidth*3;
 
-static const float pi = 3.141592653589793238462643383279;
+//static const float pi = 3.141592653589793238462643383279;
 static const short nFramesPerRotation = 20;
 static const float intendedRotation = pi / 2;
 static const float rotationSpeed = intendedRotation / (float)nFramesPerRotation;
@@ -137,9 +137,14 @@ void CubeletFace::snapCorners() {
     
 	for (short i = 0; i < this->nCorners; i++) {
 		console() << "Before: " << this->oldPositions[i] << endl;
-		this->oldPositions[i].x = roundf(this->oldPositions[i].x);
-		this->oldPositions[i].y = roundf(this->oldPositions[i].y);
-		this->oldPositions[i].z = roundf(this->oldPositions[i].z);
+        
+        // Change 'round' to 'roundf' if doesn't give correct output
+        //---------------------------------------------------------------
+		this->oldPositions[i].x = round(this->oldPositions[i].x);
+		this->oldPositions[i].y = round(this->oldPositions[i].y);
+		this->oldPositions[i].z = round(this->oldPositions[i].z);
+        //---------------------------------------------------------------
+        
 		console() << "After: " << this->oldPositions[i] << endl << endl;
         
 		iter.setPosition(this->oldPositions[i]);
@@ -199,7 +204,7 @@ Cubelet::Cubelet(const Vec3f& cntr, const Vec3f& diagonalSize) {
 	}
     
 	// Face 1:
-	Vec3f tempVecArray[this->nFaces][4] = {
+	Vec3f tempVecArray[6][4] = {
 		{
 			this->center + cubeVertices[0], // Face 1
 			this->center + cubeVertices[1],
@@ -261,9 +266,13 @@ void Cubelet::rotate(const Vec3f& axis, const float& angle) {
 }
 
 void Cubelet::snapPosition() {
-	this->center.x = roundf(this->center.x);
-	this->center.y = roundf(this->center.y);
-	this->center.z = roundf(this->center.z);
+    
+    // Change 'round' to 'roundf' if doesn't give correct output
+    // ----------------------------------------------------------
+	this->center.x = round(this->center.x);
+	this->center.y = round(this->center.y);
+	this->center.z = round(this->center.z);
+    // ----------------------------------------------------------
     
 	for (short i = 0; i < this->nFaces; i++) {
 		this->faceArray[i].snapCorners();
@@ -522,7 +531,7 @@ void LeapMotionApp::setup() {
 	camera.setPerspective( 60.0f, getWindowAspectRatio(), 1.0f, 2000.0f );
 	mMayaCam.setCurrentCam( camera );
     
-	float test = 4.49f;
+//	float test = 4.49f;
 }
 
 void LeapMotionApp::prepareSettings(Settings* settings) {
