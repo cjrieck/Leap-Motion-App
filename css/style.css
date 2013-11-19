@@ -24,7 +24,7 @@ section{
 }
 
 #about { 
-	background: url(../images/rubikscubeHD.png) 50% 0 no-repeat fixed; 
+	background: url(../images/RubiksHD.png) 50% 0 no-repeat fixed; 
   background-size: cover;
 	padding-top: 150px;
   height: 900px; /* messing with the heights so that it looks good on any size screen */
