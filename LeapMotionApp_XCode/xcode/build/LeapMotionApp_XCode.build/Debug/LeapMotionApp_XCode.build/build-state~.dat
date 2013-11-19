@@ -1,107 +1,0 @@
-TLeapMotionApp_XCode
-v6
-r1
-cCheck dependencies
-cProcessInfoPlistFile /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Info.plist /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/Info.plist
-cCpResource /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/resources/CinderApp.icns build/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icns
-cProcessPCH++ /var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.pch LeapMotionApp_XCode_Prefix.pch normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/SDKSettings.plist
-c0000000052686999000000000000044C
-t1382574489
-s1100
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/CoreServices/SystemVersion.plist
-c000000005268699900000000000001DB
-t1382574489
-s475
-
-N/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/resources/CinderApp.icns
-c00000000527917A80000000000070375
-t1383667624
-s459637
-
-N/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/Info.plist
-c00000000527917A80000000000000462
-t1383667624
-s1122
-
-N/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode_Prefix.pch
-c00000000527917A8000000000000012D
-t1383667624
-s301
-
-N/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Info.plist
-t2
-s0
-
-N/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/PkgInfo
-t2
-s0
-
-N/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icns
-t2
-s0
-
-N/var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.pch
-t2
-s0
-
-CBuild AST from /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/src/LeapMotionApp_XCodeApp.cpp
-r0
-
-CCheck dependencies
-r0
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies25cd0f314f29b841^c1e519314f29b841^---0#1#1#--18"Check dependencies36"D46805B4-061F-4BD9-A171-C362AC50C83B-
-
-CCompileC ./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp_XCodeApp.o /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/src/LeapMotionApp_XCodeApp.cpp normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler
-r0
-
-CCpResource /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/resources/CinderApp.icns build/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icns
-s405360433.105133
-e405360433.106093
-r1
-xCpResource
-x/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/resources/CinderApp.icns
-xbuild/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icns
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection74"Copy build/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icns170"CpResource /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/resources/CinderApp.icns build/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icnsfef11a314f29b841^274b21314f29b841^---0#0#1#-19%DVTDocumentLocation2@147"file:///Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icns00344c32dfffdf42^577"CpResource /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/resources/CinderApp.icns build/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icns    cd /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/resources/CinderApp.icns /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Resources36"8C77446C-F042-4185-A532-B4B699901FD8-
-bE29BBC54-460A-4BEF-ABB6-EBF418DD26BD
-
-CLd /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode normal i386
-r0
-
-CProcessInfoPlistFile /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Info.plist /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/Info.plist
-s405360433.103388
-e405360433.104781
-r1
-xProcessInfoPlistFile
-x/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Info.plist
-x/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/Info.plist
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection89"Process /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/Info.plist87"ProcessInfoPlistFile build/Debug/LeapMotionApp_XCode.app/Contents/Info.plist Info.plist938a1a314f29b841^244821314f29b841^---0#0#1#-19%DVTDocumentLocation2@88"file:///Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/Info.plist0000000000000000^581"ProcessInfoPlistFile build/Debug/LeapMotionApp_XCode.app/Contents/Info.plist Info.plist    cd /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode    builtin-infoPlistUtility /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/Info.plist -genpkginfo /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/PkgInfo -expandbuildsettings -platform macosx -o /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Info.plist36"B3770C57-6C57-487E-AE29-84650C99B20C-
-bE29BBC54-460A-4BEF-ABB6-EBF418DD26BD
-
-CProcessPCH++ /Users/Clayton/Library/Developer/Xcode/DerivedData/LeapMotionApp_XCode-azaeklnuptkvtxctwunoudjwplaf/Index/PrecompiledHeaders/LeapMotionApp_XCode_Prefix-exticqqyaroriigantztjwvhjncy_ast/LeapMotionApp_XCode_Prefix.pch.pch LeapMotionApp_XCode_Prefix.pch normal i386 c++ com.apple.compilers.llvm.clang.1_0.astbuilder
-r0
-
-CProcessPCH++ /var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.pch LeapMotionApp_XCode_Prefix.pch normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s405360433.106760
-e405360433.745301
-r0
-xProcessPCH++
-x/var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.pch
-xLeapMotionApp_XCode_Prefix.pch
-xnormal
-xi386
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-oIn file included from /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode_Prefix.pch:6:
-o../../../../cinder/include/cinder/Cinder.h:26:10: fatal error: 'boost/version.hpp' file not found
-o#include <boost/version.hpp>
-o         ^
-o1 error generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection41"Precompile LeapMotionApp_XCode_Prefix.pch312"ProcessPCH++ /var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.pch LeapMotionApp_XCode_Prefix.pch normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler16681b314f29b841^e7c4be314f29b841^-284"In file included from /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode_Prefix.pch:6:../../../../cinder/include/cinder/Cinder.h:26:10: fatal error: 'boost/version.hpp' file not found#include <boost/version.hpp>         ^1 error generated.1(36%IDEClangDiagnosticActivityLogMessage2@34"'boost/version.hpp' file not found-405360433#18446744073709551615#0#1(2@126"In file included from /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode_Prefix.pch:6:-405360433#18446744073709551615#0#-0#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@108"file:///Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode_Prefix.pch0000000000000000^5#10#5#10#89#0#21"Apple LLVM 5.0 Notice--2#27"com.apple.dt.IDE.diagnostic3@60"file:///Users/Clayton/Desktop/cinder/include/cinder/Cinder.h0000000000000000^25#9#25#9#1366#0#29"Lexical or Preprocessor Issue--0#0#1#-19%DVTDocumentLocation4@108"file:///Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode_Prefix.pch0000000000000000^3576"ProcessPCH++ /var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.pch LeapMotionApp_XCode_Prefix.pch normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++-header -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -stdlib=libc++ -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.7 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/LeapMotionApp_XCode-generated-files.hmap -I/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/LeapMotionApp_XCode-own-target-headers.hmap -I/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/LeapMotionApp_XCode-all-target-headers.hmap -iquote /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/LeapMotionApp_XCode-project-headers.hmap -iquote../../../../cinder/include -iquote../include -I/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug/include -I../../../../cinder/boost -I/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/DerivedSources/i386 -I/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/DerivedSources -F/Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/build/Debug --serialize-diagnostics /var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.dia -MMD -MT dependencies -MF /var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.d -c /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/LeapMotionApp_XCode_Prefix.pch -o /var/folders/bx/4t5hs8251kscjv3d94c87f0m0000gn/C/com.apple.DeveloperTools/5.0.1-5A2053/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-fnynopqvcgrrglcbgwezodknvdkr/LeapMotionApp_XCode_Prefix.pch.pch36"8ECEBB66-1DC0-4A8B-B2A5-D84628F15A0D-
-bE29BBC54-460A-4BEF-ABB6-EBF418DD26BD
-
-CTouch /Users/Clayton/Desktop/Repos/Leap-Motion-App/LeapMotionApp_XCode/xcode/./build/Debug/LeapMotionApp_XCode.app
-r0
-
