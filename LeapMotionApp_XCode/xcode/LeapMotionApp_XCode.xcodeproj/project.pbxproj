@@ -287,7 +287,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				"HEADER_SEARCH_PATHS[arch=*]" = /Users/Clayton/Downloads/boost_1_54_0;
+				"HEADER_SEARCH_PATHS[arch=*]" = "\"../../cinder/boost\"";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -297,9 +297,10 @@
 					"/Users/Clayton/Desktop/Repos/Leap-Motion-App/libc++",
 				);
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
+				"OTHER_LDFLAGS[arch=*]" = "\"../../cinder/lib/libcinder_d.a\"";
 				PRODUCT_NAME = LeapMotionApp_XCode;
 				SYMROOT = ./build;
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"$(CINDER_PATH)/include\" ../include";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"../../cinder/include\" ../include";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -318,7 +319,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = LeapMotionApp_XCode_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				"HEADER_SEARCH_PATHS[arch=*]" = /Users/Clayton/Downloads/boost_1_54_0;
+				"HEADER_SEARCH_PATHS[arch=*]" = "\"../../cinder/boost\"";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -328,9 +329,11 @@
 					"/Users/Clayton/Desktop/Repos/Leap-Motion-App/libc++",
 				);
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
+				"OTHER_LDFLAGS[arch=*]" = "\"$../../cinder/lib/libcinder.a\"";
 				PRODUCT_NAME = LeapMotionApp_XCode;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"../../cinder/include\" ../include";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
