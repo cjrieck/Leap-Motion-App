@@ -1,7 +1,6 @@
 #pragma once
 #include "cinder/CinderResources.h"
 
-//#define RES_MY_RES			CINDER_RESOURCE( ../resources/, image_name.png, 128, IMAGE )
 #define WHITE_FACE CINDER_RESOURCE(../../faces/, WhiteFace.PNG, 128, IMAGE)
 #define BLUE_FACE CINDER_RESOURCE(../../faces/, BlueFace.PNG, 129, IMAGE)
 #define RED_FACE CINDER_RESOURCE(../../faces/, RedFace.PNG, 130, IMAGE)

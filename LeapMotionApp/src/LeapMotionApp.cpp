@@ -7,7 +7,7 @@
 #include "cinder/gl/Vbo.h"
 
 #include "Resources.h"
-#include "Leap.h"
+#include "../../leap/Leap.h"
 
 #include <iostream>
 #include <cmath>
@@ -23,9 +23,9 @@ static const short sizeCube = 3;
 static const short cubeletWidth = 100;
 static const short cubeWidth = cubeletWidth*3;
 
-static const float pi = 3.141592653589793238462643383279;
+static const float roughPi = 3.141592653589793238462643383279;
 static const short nFramesPerRotation = 20;
-static const float intendedRotation = pi / 2;
+static const float intendedRotation = roughPi / 2;
 static const float rotationSpeed = intendedRotation / (float)nFramesPerRotation;
 
 static const Vec3f cubeSize(cubeWidth, cubeWidth, cubeWidth);
@@ -35,7 +35,7 @@ static const Vec3f yOffset(0.0f, cubeletWidth, 0.0f);
 static const Vec3f zOffset(0.0f, 0.0f, cubeletWidth);
 static const Vec3f rotatedCloseEnough(3.0f, 3.0f, 3.0f);
 
-float roundf(const float& num) {
+float myRoundF(const float& num) {
 	float result;
 	float floored = floorf(num);
 	float remainder = num - floored;
@@ -137,9 +137,9 @@ void CubeletFace::snapCorners() {
 
 	for (short i = 0; i < this->nCorners; i++) {
 		console() << "Before: " << this->oldPositions[i] << endl;
-		this->oldPositions[i].x = roundf(this->oldPositions[i].x);
-		this->oldPositions[i].y = roundf(this->oldPositions[i].y);
-		this->oldPositions[i].z = roundf(this->oldPositions[i].z);
+		this->oldPositions[i].x = myRoundF(this->oldPositions[i].x);
+		this->oldPositions[i].y = myRoundF(this->oldPositions[i].y);
+		this->oldPositions[i].z = myRoundF(this->oldPositions[i].z);
 		console() << "After: " << this->oldPositions[i] << endl << endl;
 
 		iter.setPosition(this->oldPositions[i]);
@@ -199,7 +199,7 @@ Cubelet::Cubelet(const Vec3f& cntr, const Vec3f& diagonalSize) {
 	}
 
 	// Face 1:
-	Vec3f tempVecArray[this->nFaces][4] = {
+	Vec3f tempVecArray[6][4] = {
 		{
 			this->center + cubeVertices[0], // Face 1
 			this->center + cubeVertices[1],
@@ -261,9 +261,9 @@ void Cubelet::rotate(const Vec3f& axis, const float& angle) {
 }
 
 void Cubelet::snapPosition() {
-	this->center.x = roundf(this->center.x);
-	this->center.y = roundf(this->center.y);
-	this->center.z = roundf(this->center.z);
+	this->center.x = myRoundF(this->center.x);
+	this->center.y = myRoundF(this->center.y);
+	this->center.z = myRoundF(this->center.z);
 
 	for (short i = 0; i < this->nFaces; i++) {
 		this->faceArray[i].snapCorners();
@@ -521,8 +521,6 @@ void LeapMotionApp::setup() {
 	camera.setCenterOfInterestPoint( cubeStartPos );
 	camera.setPerspective( 60.0f, getWindowAspectRatio(), 1.0f, 2000.0f );
 	mMayaCam.setCurrentCam( camera );
-
-	float test = 4.49f;
 }
 
 void LeapMotionApp::prepareSettings(Settings* settings) {
