@@ -7,6 +7,5 @@ dependencies: \
   ../../cinder/include/cinder/TriMesh.h \
   ../../cinder/include/cinder/gl/Texture.h \
   /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/../include/Resources.h \
-  ../../cinder/include/cinder/CinderResources.h \
-  /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/../../leap/Leap.h \
-  /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/../../leap/LeapMath.h
+  ../../cinder/include/cinder/CinderResources.h ../../leap/Leap.h \
+  ../../leap/LeapMath.h

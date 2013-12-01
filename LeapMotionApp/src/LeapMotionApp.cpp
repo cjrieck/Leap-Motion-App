@@ -7,7 +7,7 @@
 #include "cinder/gl/Vbo.h"
 
 #include "Resources.h"
-#include "../../leap/Leap.h"
+#include "Leap.h"
 
 #include <iostream>
 #include <cmath>
@@ -23,7 +23,7 @@ static const short sizeCube = 3;
 static const short cubeletWidth = 100;
 static const short cubeWidth = cubeletWidth*3;
 
-static const float roughPi = 3.141592653589793238462643383279;
+static const float roughPi = atan(1) * 4;
 static const short nFramesPerRotation = 20;
 static const float intendedRotation = roughPi / 2;
 static const float rotationSpeed = intendedRotation / (float)nFramesPerRotation;
@@ -33,7 +33,6 @@ static const Vec3f cubeletSize(cubeletWidth, cubeletWidth, cubeletWidth);
 static const Vec3f xOffset(cubeletWidth, 0.0f, 0.0f);
 static const Vec3f yOffset(0.0f, cubeletWidth, 0.0f);
 static const Vec3f zOffset(0.0f, 0.0f, cubeletWidth);
-static const Vec3f rotatedCloseEnough(3.0f, 3.0f, 3.0f);
 
 float myRoundF(const float& num) {
 	float result;
@@ -176,19 +175,20 @@ Cubelet::Cubelet(const Vec3f& cntr, const Vec3f& diagonalSize) {
 	this->yellowFace = gl::Texture::create( loadImage( loadResource(YELLOW_FACE) ) );
 
 	this->faceTexArray = new gl::TextureRef[6];
-	faceTexArray[0] = this->redFace; // Ordered so the final showing is correct (according to Zevi)
-	faceTexArray[1] = this->whiteFace;
-	faceTexArray[2] = this->blueFace;
-	faceTexArray[3] = this->greenFace;
-	faceTexArray[4] = this->yellowFace;
-	faceTexArray[5] = this->orangeFace;
+	// Ordered so the final showing is correct (according to Zevi)
+	faceTexArray[0] = this->greenFace; // Left
+	faceTexArray[1] = this->whiteFace; // Bottom
+	faceTexArray[2] = this->redFace; // Back
+	faceTexArray[3] = this->orangeFace; // Front
+	faceTexArray[4] = this->yellowFace; // Top
+	faceTexArray[5] = this->blueFace; // Right
 
 
 	this->center = cntr;
 	this->size = diagonalSize;
 	Vec3f halfSize = this->size / 2;
 
-	Vec3f cubeVertices[8];
+	Vec3f cubeVertices[8]; // Creating vertices of cubelet (relative to center)
 	short vertIndex = 0;
 	for (short i = -1; i <= 1; i += 2) { // Note: Jumping by 2 -> -1 and 1
 		for (short j = -1; j <= 1; j += 2) {
@@ -199,7 +199,7 @@ Cubelet::Cubelet(const Vec3f& cntr, const Vec3f& diagonalSize) {
 	}
 
 	// Face 1:
-	Vec3f tempVecArray[6][4] = {
+	Vec3f tempVecArray[6][4] = { // Cubelet faces (constructed from relative positions and center)
 		{
 			this->center + cubeVertices[0], // Face 1
 			this->center + cubeVertices[1],
@@ -272,6 +272,7 @@ void Cubelet::snapPosition() {
 
 class Cube {
 private:
+	// Cube movement status variables
 	bool midMovement;
 	Vec3f motionAxis;
 	short motionDirection;
@@ -280,6 +281,7 @@ private:
 	short nCubeletsMoving;
 	short* turningIndices;
 
+	// Cube information variables
 	short nSides, nCubelets;
 	Vec3f center, size;
 	Cubelet* cubeletArray;
@@ -420,7 +422,7 @@ void Cube::endMovement() {
 
 class LeapMotionListener : public Listener {
 public:
-	float* pointsList;
+    Vector* fingers;
 
 	virtual void onInit(const Controller&);
     virtual void onConnect(const Controller&);
@@ -432,11 +434,8 @@ public:
 };
 
 void LeapMotionListener::onInit(const Controller& controller) {
-	short lenData = 3;
-	this->pointsList = new float[lenData];
-	for (short i = 0; i < lenData; i++) {
-		this->pointsList[i] = 0;
-	}
+	short numFingers = 4;
+    this->fingers = new Vector[numFingers];
 	console() << "Initialized" << endl;
 }
 
@@ -457,13 +456,13 @@ void LeapMotionListener::onFrame(const Controller& controller) {
 	InteractionBox intBox = frame.interactionBox();
 
 	Finger finger = frame.fingers().frontmost();
-	Vector stabilizedPoint = finger.stabilizedTipPosition();
+//	Vector stabilizedPoint = finger.stabilizedTipPosition();
+//	Vector normalizedPoint = intBox.normalizePoint(stabilizedPoint);
+	
+	Vector fingerPoint = finger.tipPosition();
+	Vector normalizedPoint = intBox.normalizePoint(fingerPoint);
 
-	Vector normalizedPoint = intBox.normalizePoint(stabilizedPoint) * 2;
-
-	this->pointsList[0] = normalizedPoint.x - 1;
-	this->pointsList[1] = normalizedPoint.y - 1;
-	this->pointsList[2] = normalizedPoint.z - 1;
+	this->fingers[0] = normalizedPoint;
 }
 
 void LeapMotionListener::onFocusGained(const Controller& controller) {
@@ -494,7 +493,7 @@ public:
 	// Cinder
 	Vec2i mMousePos;
 	MayaCamUI mMayaCam; // Have to include "MayaCamUI.h"
-	CameraPersp mCameraPersp; // Have to include "CameraPersp.h"?
+	MayaCamUI leapMayaCam;
 
 	void setup();
 	void prepareSettings(Settings*);
@@ -508,8 +507,17 @@ public:
 
 void LeapMotionApp::setup() {
 	// Initial settings
-	Vec3f viewStartPos(800.0f, 0.0f, 0.0f); // View starts back at 800
+	short cameraSphereRadius = 800;
 	Vec3f cubeStartPos = Vec3f::zero(); // Cube starts at 0
+	
+	Vec3f leapViewPoint(0.0f, 0.0f, 1.0f); // Leap's viewpoint is always from back in the z-direction
+	leapViewPoint.normalize();
+	leapViewPoint *= cameraSphereRadius;
+	Vec3f viewStartPos(1.0f, 1.0f, 1.0f); // View starts at some value
+	viewStartPos.normalize(); // Normalize to unit vector
+	viewStartPos *= cameraSphereRadius; // 800 is the radius of sphere along which the camera travels
+    float fieldOfView = 60.0f;
+    float depthOfView = 3000.0f;
 
 	// Setup calls
 	this->leapController.addListener(leapListener);
@@ -519,8 +527,14 @@ void LeapMotionApp::setup() {
 	CameraPersp camera;
 	camera.setEyePoint( viewStartPos );
 	camera.setCenterOfInterestPoint( cubeStartPos );
-	camera.setPerspective( 60.0f, getWindowAspectRatio(), 1.0f, 2000.0f );
+	camera.setPerspective( fieldOfView, getWindowAspectRatio(), 1.0f, depthOfView );
 	mMayaCam.setCurrentCam( camera );
+	
+	CameraPersp camera2;
+	camera2.setEyePoint( leapViewPoint );
+	camera2.setCenterOfInterestPoint( cubeStartPos );
+	camera.setPerspective( fieldOfView, getWindowAspectRatio(), 1.0f, depthOfView );
+	leapMayaCam.setCurrentCam( camera2 );
 }
 
 void LeapMotionApp::prepareSettings(Settings* settings) {
@@ -543,7 +557,12 @@ void LeapMotionApp::mouseDrag( MouseEvent event ) {
 
 void LeapMotionApp::keyDown( KeyEvent event ) {
 	if (event.getCode() == KeyEvent::KEY_ESCAPE) {
+		this->leapController.removeListener(this->leapListener);
 		quit();
+	}
+	if (event.getCode() == KeyEvent::KEY_LCTRL) {
+	}
+	if (event.getCode() == KeyEvent::KEY_LALT) {
 	}
 
 	if (event.getCode() == KeyEvent::KEY_u && event.isShiftDown()) { // Up face turn
@@ -585,22 +604,31 @@ void LeapMotionApp::keyDown( KeyEvent event ) {
 }
 
 void LeapMotionApp::update() {
-	// set up the camera 
-	gl::setMatrices( mMayaCam.getCamera() );
-
 	this->rCube.update();
 }
 
 void LeapMotionApp::draw() {
 	// Clear to black
-	gl::clear( Color( 0, 0, 0 ), true );
+	gl::clear( Color( 255, 255, 255 ), true );
 
 	// enable the depth buffer (after all, we are doing 3D)
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
-
+	
 	// Render the cube
 	this->rCube.draw();
+	
+	// Update the view from Leap's camera
+	gl::setMatrices( leapMayaCam.getCamera() );
+	
+	Vector& finger = this->leapListener.fingers[0];
+	Vec3f openGLFingerVector(finger.x, finger.y, finger.z);
+	openGLFingerVector -= Vec3f(0.5f, 0.5f, 0.5f);
+	openGLFingerVector *= 400;
+	gl::drawVector(Vec3f::zero(), openGLFingerVector);
+	
+	// Update the view from camera
+	gl::setMatrices( mMayaCam.getCamera() );
 }
 
 void LeapMotionApp::resize() {

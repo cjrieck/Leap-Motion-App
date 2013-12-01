@@ -50,7 +50,7 @@
 		11423B925DAC49F38808DB94 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		4E261142183BD72700BFD149 /* LeapMotionApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeapMotionApp.cpp; path = ../src/LeapMotionApp.cpp; sourceTree = "<group>"; };
+		4E261142183BD72700BFD149 /* LeapMotionApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeapMotionApp.cpp; path = ../src/LeapMotionApp.cpp; sourceTree = "<group>"; usesTabs = 1; };
 		4E55D054183BDDDC00ADE7D7 /* libLeap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libLeap.dylib; path = ../../leap/osx/libLeap.dylib; sourceTree = "<group>"; };
 		4E59CC26183BDAF500F64536 /* libLeap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libLeap.dylib; path = ../../leap/osx/libLeap.dylib; sourceTree = "<group>"; };
 		4EB8FD2E183BE3EB00721EFC /* BlueFace.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BlueFace.PNG; path = ../../faces/BlueFace.PNG; sourceTree = "<group>"; };
@@ -276,7 +276,10 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				"HEADER_SEARCH_PATHS[arch=*]" = "\"../../cinder/boost\"";
+				"HEADER_SEARCH_PATHS[arch=*]" = (
+					"\"$(CINDER_PATH)/boost\"",
+					../../leap,
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -310,7 +313,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = LeapMotionApp_XCode_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				"HEADER_SEARCH_PATHS[arch=*]" = "\"../../cinder/boost\"";
+				"HEADER_SEARCH_PATHS[arch=*]" = (
+					"\"$(CINDER_PATH)/boost\"",
+					../../leap,
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -342,14 +348,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				"HEADER_SEARCH_PATHS[arch=*]" = (
-					"\"$(CINDER_PATH)/boost\"",
-					"\"../../leap\"",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"../../cinder/include\" ../include";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"$(CINDER_PATH)/include\" ../include ../../leap";
 			};
 			name = Debug;
 		};
@@ -364,14 +366,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				"HEADER_SEARCH_PATHS[arch=*]" = (
-					"\"$(CINDER_PATH)/boost\"",
-					"\"../../leap\"",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"../../cinder/include\" ../include";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"$(CINDER_PATH)/include\" ../include ../../leap";
 			};
 			name = Release;
 		};
