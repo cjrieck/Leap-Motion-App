@@ -2,8 +2,7 @@
 #include "cinder/ImageIo.h"
 #include "cinder/MayaCamUI.h"
 #include "cinder/Vector.h"
-#include "cinder/gl/Vbo.h"
-#include "cinder/gl/Texture.h"
+#include "cinder/gl/TextureFont.h"
 #include "cinder/gl/Vbo.h"
 
 #include "Resources.h"
@@ -28,6 +27,9 @@ static const short nFramesPerRotation = 20;
 static const float intendedRotation = roughPi / 2;
 static const float rotationSpeed = intendedRotation / (float)nFramesPerRotation;
 
+static const short nFramesPerSwipeRotation = 20;
+static const float swipeRotationSpeed = intendedRotation / (float)nFramesPerSwipeRotation;
+
 static const Vec3f cubeSize(cubeWidth, cubeWidth, cubeWidth);
 static const Vec3f cubeletSize(cubeletWidth, cubeletWidth, cubeletWidth);
 static const Vec3f xOffset(cubeletWidth, 0.0f, 0.0f);
@@ -35,7 +37,7 @@ static const Vec3f yOffset(0.0f, cubeletWidth, 0.0f);
 static const Vec3f zOffset(0.0f, 0.0f, cubeletWidth);
 
 float myRoundF(const float& num) {
-	float result;
+	float result = 0;
 	float floored = floorf(num);
 	float remainder = num - floored;
 
@@ -59,6 +61,23 @@ float myRoundF(const float& num) {
 		}
 	}
 	return result;
+}
+
+Vec3f findClosestAxis(Vec3f direction) {
+	Vec3f axis = direction;
+	
+	if (abs(axis.x) > abs(axis.y)) axis.y = 0;
+	else axis.x = 0;
+	
+	if (abs(axis.x) > abs(axis.z)) axis.z = 0;
+	else axis.x = 0;
+	
+	if (abs(axis.y) > abs(axis.z)) axis.z = 0;
+	else axis.y = 0;
+	
+	axis.normalize();
+	
+	return axis;
 }
 
 class CubeletFace {
@@ -135,11 +154,9 @@ void CubeletFace::snapCorners() {
 	gl::VboMesh::VertexIter iter = this->mesh.mapVertexBuffer();
 
 	for (short i = 0; i < this->nCorners; i++) {
-		console() << "Before: " << this->oldPositions[i] << endl;
 		this->oldPositions[i].x = myRoundF(this->oldPositions[i].x);
 		this->oldPositions[i].y = myRoundF(this->oldPositions[i].y);
 		this->oldPositions[i].z = myRoundF(this->oldPositions[i].z);
-		console() << "After: " << this->oldPositions[i] << endl << endl;
 
 		iter.setPosition(this->oldPositions[i]);
 		++iter;
@@ -277,16 +294,17 @@ private:
 	Vec3f motionAxis;
 	short motionDirection;
 	short nSlicesMoving;
-	short nMovementsMade;
+	short nMovementsLeft;
 	short nCubeletsMoving;
 	short* turningIndices;
+	short cooldown;
 
 	// Cube information variables
 	short nSides, nCubelets;
 	Vec3f center, size;
 	Cubelet* cubeletArray;
 public:
-	Cube() : midMovement(false), nMovementsMade(0) {};
+	Cube() : midMovement(false), nMovementsLeft(nFramesPerRotation), cooldown(nFramesPerRotation) {};
 
 	void operator()(const Vec3f&, const Vec3f&, const short&);
 
@@ -339,21 +357,24 @@ void Cube::draw() const {
 }
 
 void Cube::update() {
-	if (!this->midMovement) return;
+	if (this->cooldown > 0) this->cooldown--;
 
-	if (this->nMovementsMade >= nFramesPerRotation) {
-		this->endMovement();
-	}
-	else {
-		for (short i = 0; i < this->nCubeletsMoving; i++) {
-			this->cubeletArray[this->turningIndices[i]].rotate(this->motionAxis, this->motionDirection*rotationSpeed);
+	if (this->midMovement) {
+		if (this->nMovementsLeft <= 0) {
+			this->endMovement();
+			this->cooldown = nFramesPerRotation;
 		}
-		this->nMovementsMade++;
+		else {
+			for (short i = 0; i < this->nCubeletsMoving; i++) {
+				this->cubeletArray[this->turningIndices[i]].rotate(this->motionAxis, this->motionDirection*rotationSpeed);
+			}
+			this->nMovementsLeft--;
+		}
 	}
 }
 
 void Cube::rotateSlices(const short& nSlicesTurning, const Vec3f& rotationAxis, const short& rotationDirection) {
-	if (this->midMovement) return;
+	if (this->midMovement or this->cooldown) return;
 	else this->midMovement = true;
 
 	this->nSlicesMoving = nSlicesTurning;
@@ -412,8 +433,8 @@ void Cube::rotateSlices(const short& nSlicesTurning, const Vec3f& rotationAxis, 
 }
 
 void Cube::endMovement() {
-	this->nMovementsMade = 0;
 	this->midMovement = false;
+	this->nMovementsLeft = nFramesPerRotation;
 
 	for (short i = 0; i < this->nCubelets; i++) {
 		this->cubeletArray[i].snapPosition();
@@ -423,6 +444,10 @@ void Cube::endMovement() {
 class LeapMotionListener : public Listener {
 public:
     Vector* fingers;
+	bool swipeGestureActive;
+	Vector swipeDirection;
+	bool circleGestureActive;
+	Vector circleNormal;
 
 	virtual void onInit(const Controller&);
     virtual void onConnect(const Controller&);
@@ -436,6 +461,13 @@ public:
 void LeapMotionListener::onInit(const Controller& controller) {
 	short numFingers = 4;
     this->fingers = new Vector[numFingers];
+	
+	this->circleGestureActive = false;
+	this->swipeGestureActive = false;
+	
+	controller.enableGesture(Gesture::TYPE_SWIPE);
+	controller.enableGesture(Gesture::TYPE_CIRCLE);
+	
 	console() << "Initialized" << endl;
 }
 
@@ -453,16 +485,29 @@ void LeapMotionListener::onExit(const Controller& controller) {
 
 void LeapMotionListener::onFrame(const Controller& controller) {
 	Frame frame = controller.frame();
-	InteractionBox intBox = frame.interactionBox();
-
-	Finger finger = frame.fingers().frontmost();
-//	Vector stabilizedPoint = finger.stabilizedTipPosition();
-//	Vector normalizedPoint = intBox.normalizePoint(stabilizedPoint);
+	GestureList gestures = frame.gestures();
 	
-	Vector fingerPoint = finger.tipPosition();
-	Vector normalizedPoint = intBox.normalizePoint(fingerPoint);
-
-	this->fingers[0] = normalizedPoint;
+	for (int i = 0; i < gestures.count(); i++) {
+		if (gestures[i].type() == Gesture::TYPE_CIRCLE) {
+			this->circleGestureActive = true;
+			CircleGesture cGesture = gestures[i];
+			this->circleNormal = cGesture.normal();
+		}
+		else if (gestures[i].type() == Gesture::TYPE_SWIPE and !(this->circleGestureActive)) {
+			this->swipeGestureActive = true;
+			SwipeGesture sGesture = gestures[i];
+			this->swipeDirection = sGesture.direction();
+		}
+		else {
+			this->swipeGestureActive = false;
+			this->circleGestureActive = false;
+		}
+	}
+	
+	if (gestures.count() == 0) {
+		this->swipeGestureActive = false;
+		this->circleGestureActive = false;
+	}
 }
 
 void LeapMotionListener::onFocusGained(const Controller& controller) {
@@ -473,33 +518,91 @@ void LeapMotionListener::onFocusLost(const Controller& controller) {
 	console() << "Focus lost" << endl;
 }
 
+class LeapCamera {
+private:
+public:
+	bool currentlyAnimating;
+	short nAnimationsLeft;
+	CameraPersp camera;
+	Vec3f animationRotationAxis;
+	
+	LeapCamera() {};
+	
+	void animateSwipeRotation(Vector);
+	void update();
+	
+	void operator()(Vec3f, Vec3f, float, float, float, float);
+};
+
+void LeapCamera::operator()(Vec3f eyePoint, Vec3f interestPoint, float fieldOfView, float aspectRatio, float nearPlane, float farPlane) {
+	this->camera.setEyePoint(eyePoint);
+	this->camera.setCenterOfInterestPoint(interestPoint);
+	this->camera.setPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
+	this->currentlyAnimating = false;
+}
+
+void LeapCamera::animateSwipeRotation(Vector swipeDirection) {
+	if (this->currentlyAnimating) {
+//		console() << "Trying to animate during an animation, failed." << endl;
+		return;
+	}
+	else {
+//		console() << "Starting rotation with direction: " << swipeDirection << endl;
+		this->currentlyAnimating = true;
+		this->nAnimationsLeft = nFramesPerSwipeRotation;
+	}
+	
+	Vec3f vec3fSwipeAxis = findClosestAxis(Vec3f(swipeDirection.x, swipeDirection.y, swipeDirection.z));
+	
+	this->animationRotationAxis = vec3fSwipeAxis.cross(Vec3f::zAxis());
+	
+//	console() << "Rotating towards " << vec3fSwipeAxis << " around " << this->animationRotationAxis	<< endl;
+}
+
+void LeapCamera::update() {
+	if (!this->currentlyAnimating) {
+		return;
+	}
+	
+	Vec3f currentLocation = camera.getEyePoint();
+	Vec3f currentFocus = camera.getCenterOfInterestPoint();
+	
+	Vec3f newLocation = currentLocation * Quatf(this->animationRotationAxis, swipeRotationSpeed);
+	
+	this->camera.setEyePoint(newLocation);
+	this->camera.setCenterOfInterestPoint(currentFocus);
+	
+	this->nAnimationsLeft--;
+	
+	if (this->nAnimationsLeft <= 0) {
+		this->currentlyAnimating = false;
+	}
+}
+
 class LeapMotionApp : public AppNative {
 private:
 public:
 	// Cube
 	Cube rCube;
-	gl::VboMeshRef mesh;
-
-	static const int VERTICES_X = 20, VERTICES_Z = 20;
-
-	gl::VboMeshRef	mVboMesh, mVboMesh2;
-	gl::TextureRef	mTexture;
-	CameraPersp		mCamera;
+	gl::TextureFontRef mText;
+	Font mFont;
+	bool shiftPressed;
 
 	// Leap
 	LeapMotionListener leapListener;
 	Controller leapController;
 
+	// Camera
+	LeapCamera staticCamera; // For leap's static displaying
+	LeapCamera lCamera;
+	
 	// Cinder
-	Vec2i mMousePos;
-	MayaCamUI mMayaCam; // Have to include "MayaCamUI.h"
-	MayaCamUI leapMayaCam;
-
 	void setup();
 	void prepareSettings(Settings*);
 	void mouseDown( MouseEvent event );
 	void mouseDrag( MouseEvent event );
 	void keyDown( KeyEvent event );
+	void keyUp( KeyEvent event );
 	void update();
 	void draw();
 	void resize();
@@ -521,38 +624,25 @@ void LeapMotionApp::setup() {
 
 	// Setup calls
 	this->leapController.addListener(leapListener);
-
 	this->rCube(cubeStartPos, cubeSize, sizeCube);
-
-	CameraPersp camera;
-	camera.setEyePoint( viewStartPos );
-	camera.setCenterOfInterestPoint( cubeStartPos );
-	camera.setPerspective( fieldOfView, getWindowAspectRatio(), 1.0f, depthOfView );
-	mMayaCam.setCurrentCam( camera );
+	this->shiftPressed = false;
 	
-	CameraPersp camera2;
-	camera2.setEyePoint( leapViewPoint );
-	camera2.setCenterOfInterestPoint( cubeStartPos );
-	camera.setPerspective( fieldOfView, getWindowAspectRatio(), 1.0f, depthOfView );
-	leapMayaCam.setCurrentCam( camera2 );
+	mFont = Font("Arial", 22);
+	mText = gl::TextureFont::create( mFont );
+	
+	this->staticCamera(viewStartPos, cubeStartPos, fieldOfView, getWindowAspectRatio(), 1.0f, depthOfView);
+	this->lCamera(viewStartPos, cubeStartPos, fieldOfView, getWindowAspectRatio(), 1.0f, depthOfView);
 }
 
 void LeapMotionApp::prepareSettings(Settings* settings) {
-	//settings->setWindowSize(800, 600);
 	settings->setFullScreen();
 	settings->setFrameRate(60.0f);
 }
 
 void LeapMotionApp::mouseDown( MouseEvent event ) {
-	mMayaCam.mouseDown( event.getPos() );
 }
 
 void LeapMotionApp::mouseDrag( MouseEvent event ) {
-	// Store position of mouse
-	mMousePos = event.getPos();
-
-	// Let MayaCam handle the mouse dragging camera changes
-	mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 }
 
 void LeapMotionApp::keyDown( KeyEvent event ) {
@@ -560,9 +650,9 @@ void LeapMotionApp::keyDown( KeyEvent event ) {
 		this->leapController.removeListener(this->leapListener);
 		quit();
 	}
-	if (event.getCode() == KeyEvent::KEY_LCTRL) {
-	}
-	if (event.getCode() == KeyEvent::KEY_LALT) {
+	
+	if (event.getCode() == KeyEvent::KEY_LSHIFT) {
+		this->shiftPressed = true;
 	}
 
 	if (event.getCode() == KeyEvent::KEY_u && event.isShiftDown()) { // Up face turn
@@ -571,28 +661,28 @@ void LeapMotionApp::keyDown( KeyEvent event ) {
 	else if (event.getCode() == KeyEvent::KEY_u) {
 		this->rCube.rotateSlices(1, Vec3f::yAxis(), -1);
 	}
-	else if (event.getCode() == KeyEvent::KEY_f && event.isShiftDown()) { // Front face turn
+	else if (event.getCode() == KeyEvent::KEY_r && event.isShiftDown()) { // Right face turn
 		this->rCube.rotateSlices(1, Vec3f::xAxis(), 1);
 	}
-	else if (event.getCode() == KeyEvent::KEY_f) {
+	else if (event.getCode() == KeyEvent::KEY_r) {
 		this->rCube.rotateSlices(1, Vec3f::xAxis(), -1);
 	}
-	else if (event.getCode() == KeyEvent::KEY_l && event.isShiftDown()) { // Left face turn
+	else if (event.getCode() == KeyEvent::KEY_f && event.isShiftDown()) { // Front face turn
 		this->rCube.rotateSlices(1, Vec3f::zAxis(), 1);
 	}
-	else if (event.getCode() == KeyEvent::KEY_l) {
+	else if (event.getCode() == KeyEvent::KEY_f) {
 		this->rCube.rotateSlices(1, Vec3f::zAxis(), -1);
 	}
-	else if (event.getCode() == KeyEvent::KEY_r && event.isShiftDown()) { // Right face turn
+	else if (event.getCode() == KeyEvent::KEY_b && event.isShiftDown()) { // Back face turn
 		this->rCube.rotateSlices(1, Vec3f::zAxis()*-1, 1);
 	}
-	else if (event.getCode() == KeyEvent::KEY_r) {
+	else if (event.getCode() == KeyEvent::KEY_b) {
 		this->rCube.rotateSlices(1, Vec3f::zAxis()*-1, -1);
 	}
-	else if (event.getCode() == KeyEvent::KEY_b && event.isShiftDown()) { // Back face turn
+	else if (event.getCode() == KeyEvent::KEY_l && event.isShiftDown()) { // Left face turn
 		this->rCube.rotateSlices(1, Vec3f::xAxis()*-1, 1);
 	}
-	else if (event.getCode() == KeyEvent::KEY_b) {
+	else if (event.getCode() == KeyEvent::KEY_l) {
 		this->rCube.rotateSlices(1, Vec3f::xAxis()*-1, -1);
 	}
 	else if (event.getCode() == KeyEvent::KEY_d && event.isShiftDown()) { // Down face turn
@@ -603,8 +693,34 @@ void LeapMotionApp::keyDown( KeyEvent event ) {
 	}
 }
 
+void LeapMotionApp::keyUp( KeyEvent event ) {
+	if (event.getCode() == KeyEvent::KEY_LSHIFT) {
+		this->shiftPressed = false;
+	}
+}
+
 void LeapMotionApp::update() {
+	if (this->leapListener.swipeGestureActive) {
+		this->lCamera.animateSwipeRotation(this->leapListener.swipeDirection);
+	}
+	if (this->leapListener.circleGestureActive) {
+		Vector& normal = this->leapListener.circleNormal;
+		Vec3f rotationAxis = findClosestAxis(Vec3f(normal.x, normal.y, normal.z));
+		short direction = 1;
+		
+		if (rotationAxis.x == -1 or rotationAxis.y == -1 or rotationAxis.z == -1) { // If the axis is negative, make it positive but also invert rotation
+			rotationAxis *= -1;
+			direction *= -1;
+		}
+		if (this->shiftPressed) { // If shift if pressed, invert axis
+			rotationAxis *= -1;
+		}
+		
+		this->rCube.rotateSlices(1, rotationAxis, direction);
+	}
+	
 	this->rCube.update();
+	this->lCamera.update();
 }
 
 void LeapMotionApp::draw() {
@@ -615,26 +731,17 @@ void LeapMotionApp::draw() {
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
 	
-	// Render the cube
-	this->rCube.draw();
-	
 	// Update the view from Leap's camera
-	gl::setMatrices( leapMayaCam.getCamera() );
-	
-	Vector& finger = this->leapListener.fingers[0];
-	Vec3f openGLFingerVector(finger.x, finger.y, finger.z);
-	openGLFingerVector -= Vec3f(0.5f, 0.5f, 0.5f);
-	openGLFingerVector *= 400;
-	gl::drawVector(Vec3f::zero(), openGLFingerVector);
+//	gl::setMatrices( this->staticCamera.camera );
 	
 	// Update the view from camera
-	gl::setMatrices( mMayaCam.getCamera() );
+	gl::setMatrices( this->lCamera.camera );
+	// Render the cube
+	this->rCube.draw();
 }
 
 void LeapMotionApp::resize() {
-	CameraPersp camera = mMayaCam.getCamera();
-	camera.setAspectRatio( getWindowAspectRatio() );
-	mMayaCam.setCurrentCam( camera );
+	lCamera.camera.setAspectRatio( getWindowAspectRatio() );
 }
 
 CINDER_APP_NATIVE( LeapMotionApp, RendererGl )
