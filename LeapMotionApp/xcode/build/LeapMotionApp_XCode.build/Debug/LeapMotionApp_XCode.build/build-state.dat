@@ -437,9 +437,9 @@ t1385697568
 s459637
 
 N/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp
-c00000000529D30D3000000000000527F
-t1386033363
-s21119
+c00000000529D316500000000000052CC
+t1386033509
+s21196
 
 N/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/Info.plist
 c00000000529811200000000000000462
@@ -452,7 +452,7 @@ t1385697568
 s301
 
 N/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug/LeapMotionApp_XCode.app
-t1386033330
+t1386077848
 s102
 
 N/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/Info.plist
@@ -460,7 +460,7 @@ t1385875158
 s1519
 
 N/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode
-t1386033370
+t1386077848
 s3089156
 
 N/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/libLeap.dylib
@@ -500,8 +500,8 @@ t1385697568
 s73464
 
 N/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o
-t1386033369
-s2477452
+t1386077847
+s2477436
 
 N/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp_XCode.LinkFileList
 c000000005298112000000000000000A3
@@ -4599,11 +4599,11 @@ r0
 
 CCheck dependencies
 r0
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependenciesa016b357684db841^2497b357684db841^---0#1#1#--18"Check dependencies36"48F1A8C7-7487-4ECE-9B13-DDE8C382FF0A-
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies074361b3294eb841^1e8761b3294eb841^---0#1#1#--18"Check dependencies36"BE2DFF23-38E9-4F1F-9BF5-AC012895A320-
 
 CCompileC ./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s407726167.714091
-e407726169.556841
+s407770644.842223
+e407770647.553548
 r1
 xCompileC
 x./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o
@@ -4625,8 +4625,8 @@ d/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/include/Resources.h
 d/Users/bryanjensen/Desktop/Leap-Motion-App/cinder/include/cinder/CinderResources.h
 d/Users/bryanjensen/Desktop/Leap-Motion-App/leap/Leap.h
 d/Users/bryanjensen/Desktop/Leap-Motion-App/leap/LeapMath.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection86"Compile /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp249"CompileC ./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp normal i386 c++ com.apple.compilers.llvm.clang.1_0.compilerdbdeb657684db841^d68e8e59684db841^---0#0#1#-19%DVTDocumentLocation2@85"file:///Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp0000000000000000^2936"CompileC ./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -stdlib=libc++ -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/LeapMotionApp_XCode.hmap -I../../cinder/include -I../include -I/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug/include -I../../cinder/boost -I../../leap -I/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/DerivedSources/i386 -I/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/DerivedSources -F/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug -include /var/folders/dt/m99yn1sx2gdcbp2ygyyyf9bm0000gn/C/com.apple.DeveloperTools/5.0.2-5A3005/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-bnvpzxrblxjwojdlpyyknifmkhsy/LeapMotionApp_XCode_Prefix.pch -MMD -MT dependencies -MF /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.d --serialize-diagnostics /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.dia -c /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp -o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o36"14D66094-68A2-49D0-BDAF-01B870F62938-
-bBE05B3B4-A6E9-44C5-9491-1C999CD852EF
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection86"Compile /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp249"CompileC ./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler5fd3d714164eb841^f6b68d17164eb841^---0#0#1#-19%DVTDocumentLocation2@85"file:///Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp0000000000000000^2936"CompileC ./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp normal i386 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch i386 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -stdlib=libc++ -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/LeapMotionApp_XCode.hmap -I../../cinder/include -I../include -I/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug/include -I../../cinder/boost -I../../leap -I/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/DerivedSources/i386 -I/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/DerivedSources -F/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug -include /var/folders/dt/m99yn1sx2gdcbp2ygyyyf9bm0000gn/C/com.apple.DeveloperTools/5.0.2-5A3005/Xcode/SharedPrecompiledHeaders/LeapMotionApp_XCode_Prefix-bnvpzxrblxjwojdlpyyknifmkhsy/LeapMotionApp_XCode_Prefix.pch -MMD -MT dependencies -MF /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.d --serialize-diagnostics /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.dia -c /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/src/LeapMotionApp.cpp -o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp.o36"A658335F-F214-438B-9406-BEC0EC47B425-
+bCF8994CD-86B0-4BA4-B70D-F3C34A27B33B
 
 CCpResource /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/resources/CinderApp.icns build/Debug/LeapMotionApp_XCode.app/Contents/Resources/CinderApp.icns
 s406578709.528520
@@ -4699,8 +4699,8 @@ lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection74"Copy bu
 b2F7DBFAE-05D7-4A51-8E7D-CA6F3E0DBAEE
 
 CLd /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode normal i386
-s407726169.559952
-e407726170.058121
+s407770647.557560
+e407770648.334156
 r1
 xLd
 x/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode
@@ -4722,6 +4722,13 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libSystem.dylib
 d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.0/lib/darwin/libclang_rt.eprintf.a
 d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.0/lib/darwin/libclang_rt.osx.a
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AppKit.framework/AppKit
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreData.framework/CoreData
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcache.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcommonCrypto.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcompiler_rt.dylib
@@ -4751,13 +4758,6 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunc.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunwind.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libxpc.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AppKit.framework/AppKit
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreData.framework/CoreData
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Foundation.framework/Foundation
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
@@ -4784,8 +4784,8 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection140"Link /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode87"Ld ./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode normal i386906b8f59684db841^76e20e5a684db841^---0#0#1#--1396"Ld ./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode normal i386    cd /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode    setenv MACOSX_DEPLOYMENT_TARGET 10.9    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug -L../../leap/osx -F/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug -filelist /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp_XCode.LinkFileList -mmacosx-version-min=10.9 -dead_strip ../../cinder/lib/libcinder_d.a -stdlib=libc++ -lLeap -framework Cocoa -framework OpenGL -framework CoreVideo -framework QTKit -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio -Xlinker -dependency_info -Xlinker /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp_XCode_dependency_info.dat -o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode36"F4E48CA9-6C0E-49F4-893E-3B552102EEF1-
-bBE05B3B4-A6E9-44C5-9491-1C999CD852EF
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection140"Link /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode87"Ld ./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode normal i38693c88e17164eb841^378d5518164eb841^---0#0#1#--1396"Ld ./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode normal i386    cd /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode    setenv MACOSX_DEPLOYMENT_TARGET 10.9    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug -L../../leap/osx -F/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/build/Debug -filelist /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp_XCode.LinkFileList -mmacosx-version-min=10.9 -dead_strip ../../cinder/lib/libcinder_d.a -stdlib=libc++ -lLeap -framework Cocoa -framework OpenGL -framework CoreVideo -framework QTKit -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio -Xlinker -dependency_info -Xlinker /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/LeapMotionApp_XCode.build/Debug/LeapMotionApp_XCode.build/Objects-normal/i386/LeapMotionApp_XCode_dependency_info.dat -o /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/LeapMotionApp_XCode36"8708E1C5-B2C1-428C-9289-EDFCA5066B5F-
+bCF8994CD-86B0-4BA4-B70D-F3C34A27B33B
 
 CPBXCp /Users/bryanjensen/Desktop/Leap-Motion-App/leap/osx/libLeap.dylib build/Debug/LeapMotionApp_XCode.app/Contents/MacOS/libLeap.dylib
 s406578715.595534
@@ -7249,11 +7249,11 @@ lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection41"Precomp
 b1B44B36F-09F2-4528-8774-0740C98AB38E
 
 CTouch /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app
-s407726170.059584
-e407726170.063569
+s407770648.335164
+e407770648.338213
 r1
 xTouch
 x/Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection106"Touch /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app43"Touch ./build/Debug/LeapMotionApp_XCode.app494d0f5a684db841^6b48105a684db841^---0#0#1#--237"Touch ./build/Debug/LeapMotionApp_XCode.app    cd /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode    /usr/bin/touch -c /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app36"ADD8FF05-FDC1-4FBA-8925-6A6AB1686C84-
-bBE05B3B4-A6E9-44C5-9491-1C999CD852EF
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection106"Touch /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app43"Touch ./build/Debug/LeapMotionApp_XCode.app4ed55518164eb841^ea955618164eb841^---0#0#1#--237"Touch ./build/Debug/LeapMotionApp_XCode.app    cd /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode    /usr/bin/touch -c /Users/bryanjensen/Desktop/Leap-Motion-App/LeapMotionApp/xcode/./build/Debug/LeapMotionApp_XCode.app36"40CB2E19-6C7F-455F-950A-485F7D1AB338-
+bCF8994CD-86B0-4BA4-B70D-F3C34A27B33B
 
